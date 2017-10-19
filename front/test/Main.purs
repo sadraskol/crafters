@@ -12,11 +12,11 @@ import Test.Unit.Assert as Assert
 
 import Data.Enum (toEnum)
 import Data.Date as Date
-import Data.Maybe (Maybe(..), fromJust)
+import Data.Maybe (fromJust)
 
 import Partial.Unsafe (unsafePartial)
 
-import Calendar (nextMonday, fullMonth)
+import Calendar (getWeekdaysInRange)
 
 type Tests = Eff (console :: CONSOLE , testOutput :: TESTOUTPUT , avar :: AVAR) Unit
 
@@ -25,17 +25,8 @@ getDate year month day = unsafePartial fromJust $ Date.canonicalDate <$> toEnum 
 
 main :: Tests
 main = runTest do
-  suite "finding nextMonday" do
-    test "simple case" do
-      let today = getDate 2017 Date.October 18
-      let expected = Just $ getDate 2017 Date.October 23
-      Assert.equal expected (nextMonday today)
-    test "leaping month" do
-      let today = getDate 2017 Date.October 31
-      let expected = Just $ getDate 2017 Date.November 6
-      Assert.equal expected (nextMonday today)
-  suite "day range for a month" do
-    test "for a normal month" do
+  suite "day range for a period" do
+    test "filter dates" do
       let expected  = [ getDate 2017 Date.February 27
                       , getDate 2017 Date.February 28
                       , getDate 2017 Date.March 1
@@ -59,7 +50,6 @@ main = runTest do
                       , getDate 2017 Date.March 27
                       , getDate 2017 Date.March 28
                       , getDate 2017 Date.March 29
-                      , getDate 2017 Date.March 30
-                      , getDate 2017 Date.March 21
                       ]
-      Assert.equal expected expected
+      let actual = getWeekdaysInRange (getDate 2017 Date.February 27) (getDate 2017 Date.March 29)
+      Assert.equal expected actual
