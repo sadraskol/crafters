@@ -1,0 +1,12 @@
+<table>
+  <%= for date <- @slots do %>
+    <tr>
+      <td><%= inspect(date.date) %></td>
+    </tr>
+    <%= for slot <- date.times do %>
+      <tr>
+        <td><%= inspect(slot) %></td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
