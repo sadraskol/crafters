@@ -18,15 +18,24 @@ import Partial.Unsafe (unsafePartial)
 
 import Calendar (getWeekdaysInRange)
 
+import Slot (Slot(..), TimeSlot(..), slotsFromDates)
+
 type Tests = Eff (console :: CONSOLE , testOutput :: TESTOUTPUT , avar :: AVAR) Unit
 
 getDate :: Int -> Date.Month -> Int -> Date.Date
 getDate year month day = unsafePartial fromJust $ Date.canonicalDate <$> toEnum year <*> pure month <*> toEnum day
 
+someSlots :: Array Slot
+someSlots = [ Slot Lunch (getDate 2017 Date.February 27)
+            , Slot Evening (getDate 2017 Date.February 27)
+            , Slot Lunch (getDate 2017 Date.March 8)
+            , Slot Evening (getDate 2017 Date.March 8)
+            ]
+
 main :: Tests
 main = runTest do
-  suite "day range for a period" do
-    test "filter dates" do
+  suite "Generate full days for the time range" do
+    test "Remove weekends from the range" do
       let expected  = [ getDate 2017 Date.February 27
                       , getDate 2017 Date.February 28
                       , getDate 2017 Date.March 1
@@ -53,3 +62,10 @@ main = runTest do
                       ]
       let actual = getWeekdaysInRange (getDate 2017 Date.February 27) (getDate 2017 Date.March 29)
       Assert.equal expected actual
+  suite "Slot" do
+    test "generate every possible slot from range" do
+      let dates  = [ getDate 2017 Date.February 27
+                   , getDate 2017 Date.March 8
+                   ]
+      let actual = slotsFromDates dates
+      Assert.equal someSlots actual
