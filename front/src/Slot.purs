@@ -2,21 +2,25 @@ module Slot
   ( TimeSlot(..)
   , Slot(..)
   , slotsFromDates
+  , filterTimeSlot
+  , removeSlot
+  , removeDate
   ) where
 
 import Prelude
-import Data.Array (concatMap)
+import Data.Array (concatMap, filter)
 import Data.Date (Date)
 import Data.Generic (class Generic)
 
-data Slot = Slot TimeSlot Date
+data Slot = Slot Date TimeSlot
 
 derive instance eqSlot :: Eq Slot
 derive instance ordSlot :: Ord Slot
 derive instance genericSlot :: Generic Slot
 
 instance showSlot :: Show Slot where
-  show (Slot t d) = show t <> " " <> show d
+  show :: Slot -> String
+  show (Slot d t) = show d <> " " <> show t
 
 data TimeSlot = Lunch | Evening
 
@@ -29,4 +33,13 @@ instance showTimeSlot :: Show TimeSlot where
   show Evening = "Evening"
 
 slotsFromDates :: Array Date -> Array Slot
-slotsFromDates = concatMap \date -> [ Slot Lunch date, Slot Evening date ]
+slotsFromDates = concatMap \date -> [ Slot date Lunch, Slot date Evening ]
+
+filterTimeSlot :: TimeSlot -> Array Slot -> Array Slot
+filterTimeSlot timeslot = filter \(Slot _d t) -> t /= timeslot
+
+removeSlot :: Slot -> Array Slot -> Array Slot
+removeSlot slot = filter \s-> s /= slot
+
+removeDate :: Date -> Array Slot -> Array Slot
+removeDate date = filter \(Slot d _t) -> d /= date
