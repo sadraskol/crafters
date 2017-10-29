@@ -1,21 +1,13 @@
 module SlotTestSuite(slotTests) where
 
 import Prelude
-import Control.Monad.Free (Free)
 
+import Calendar (getDate)
+import Control.Monad.Free (Free)
+import Data.Date as Date
+import Slot (Slot(..), TimeSlot(..), slotsFromDates, filterTimeSlot, removeSlot, removeDate)
 import Test.Unit (TestF, suite, test)
 import Test.Unit.Assert as Assert
-
-import Data.Enum (toEnum)
-import Data.Date as Date
-import Data.Maybe (fromJust)
-
-import Partial.Unsafe (unsafePartial)
-
-import Slot (Slot(..), TimeSlot(..), slotsFromDates, filterTimeSlot, removeSlot, removeDate)
-
-getDate :: Int -> Date.Month -> Int -> Date.Date
-getDate year month day = unsafePartial fromJust $ Date.canonicalDate <$> toEnum year <*> pure month <*> toEnum day
 
 someSlots :: Array Slot
 someSlots = [ Slot (getDate 2017 Date.February 27) Lunch
@@ -58,4 +50,3 @@ slotTests = do
                      , Slot (getDate 2017 Date.March 8) Lunch
                      ]
       Assert.equal expected (removeSlot (Slot (getDate 2017 Date.March 8) Evening) someSlots)
-

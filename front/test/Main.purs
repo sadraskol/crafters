@@ -10,28 +10,13 @@ import Test.Unit.Main (runTest)
 import Test.Unit.Console (TESTOUTPUT)
 import Test.Unit.Assert as Assert
 
-import Data.Enum (toEnum)
 import Data.Date as Date
-import Data.Maybe (fromJust)
 
-import Partial.Unsafe (unsafePartial)
-
-import Calendar (getWeekdaysInRange)
+import Calendar (getDate, getWeekdaysInRange)
 
 import SlotTestSuite (slotTests)
-import Slot (Slot(..), TimeSlot(..))
 
 type Tests = Eff (console :: CONSOLE , testOutput :: TESTOUTPUT , avar :: AVAR) Unit
-
-getDate :: Int -> Date.Month -> Int -> Date.Date
-getDate year month day = unsafePartial fromJust $ Date.canonicalDate <$> toEnum year <*> pure month <*> toEnum day
-
-someSlots :: Array Slot
-someSlots = [ Slot (getDate 2017 Date.February 27) Lunch
-            , Slot (getDate 2017 Date.February 27) Evening
-            , Slot (getDate 2017 Date.March 8) Lunch
-            , Slot (getDate 2017 Date.March 8) Evening
-            ]
 
 main :: Tests
 main = runTest do
