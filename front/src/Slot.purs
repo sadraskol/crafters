@@ -2,7 +2,7 @@ module Slot
   ( TimeSlot(..)
   , Slot(..)
   , slotsFromDates
-  , filterTimeSlot
+  , removeTimeSlot
   , removeSlot
   , removeDate
   ) where
@@ -35,8 +35,8 @@ instance showTimeSlot :: Show TimeSlot where
 slotsFromDates :: Array Date -> Array Slot
 slotsFromDates = concatMap \date -> [ Slot date Lunch, Slot date Evening ]
 
-filterTimeSlot :: TimeSlot -> Array Slot -> Array Slot
-filterTimeSlot timeslot = filter \(Slot _d t) -> t /= timeslot
+removeTimeSlot :: TimeSlot -> Array Slot -> Array Slot
+removeTimeSlot timeslot = filter \(Slot _d t) -> t /= timeslot
 
 removeSlot :: Slot -> Array Slot -> Array Slot
 removeSlot slot = filter \s-> s /= slot

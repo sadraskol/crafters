@@ -5,7 +5,7 @@ import Prelude
 import Calendar (getDate)
 import Control.Monad.Free (Free)
 import Data.Date as Date
-import Slot (Slot(..), TimeSlot(..), slotsFromDates, filterTimeSlot, removeSlot, removeDate)
+import Slot (Slot(..), TimeSlot(..), slotsFromDates, removeTimeSlot, removeSlot, removeDate)
 import Test.Unit (TestF, suite, test)
 import Test.Unit.Assert as Assert
 
@@ -36,7 +36,7 @@ slotTests = do
       let expected = [ Slot (getDate 2017 Date.February 27) Evening
                      , Slot (getDate 2017 Date.March 8) Evening
                      ]
-      Assert.equal expected (filterTimeSlot Lunch someSlots)
+      Assert.equal expected (removeTimeSlot Lunch someSlots)
 
     test "remove a date from a range" do
       let expected = [ Slot (getDate 2017 Date.February 27) Lunch

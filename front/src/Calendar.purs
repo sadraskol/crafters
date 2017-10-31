@@ -1,4 +1,4 @@
-module Calendar (getDate, getWeekdaysInRange) where
+module Calendar (getDate, getWeekdaysInRange, frenchWeekday) where
 
 import Prelude
 
@@ -34,3 +34,11 @@ getDaysInRange :: Date.Date -> Date.Date -> Array Date.Date
 getDaysInRange bottom up  | bottom < up  = [bottom] <> getWeekdaysInRange (addDay 1 bottom) up
                           | bottom == up = [bottom]
                           | otherwise    = getWeekdaysInRange up bottom
+
+frenchWeekday :: Date.Weekday -> String
+frenchWeekday Date.Monday = "Lundi"
+frenchWeekday Date.Tuesday = "Mardi"
+frenchWeekday Date.Wednesday = "Mercredi"
+frenchWeekday Date.Thursday = "Jeudi"
+frenchWeekday Date.Friday = "Vendredi"
+frenchWeekday _ = "???"
