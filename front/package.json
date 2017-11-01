@@ -4,20 +4,29 @@
     "webpack": "webpack --progress",
     "webpack:watch": "webpack --progress --watch",
     "webpack-dev-server": "webpack-dev-server --progress --inline --hot",
-    "test": "pulp test",
-    "test:watch": "pulp -w test"
+    "test": "pulp test --src-path js/src --test-path js/test",
+    "test:watch": "pulp -w test --src-path js/src --test-path js/test"
   },
   "devDependencies": {
+    "babel-loader": "^7.1.2",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "node-sass": "^4.5.3",
+    "postcss-loader": "^2.0.8",
     "pulp": "^12.0.1",
     "purescript": "^0.11.6",
     "purescript-psa": "^0.5.1",
     "purs-loader": "^3.1.2",
+    "scss-loader": "0.0.1",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3"
   },
   "dependencies": {
+    "babel-core": "^6.26.0",
     "create-react-class": "^15.6.2",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-dom": "^16.0.0",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.0"
   }
 }

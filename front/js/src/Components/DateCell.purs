@@ -16,6 +16,8 @@ render :: _ -> State -> Date -> ReactElement
 render dispatch state date =
   R.td [ RP.onClick \_ -> dispatch $ Preference $ DateToggle date
        , RP.style { cursor: "pointer"
+                  , padding: "3px"
+                  , "margin-right": "2px"
                   }
        ] [R.text $ dateToString date]
 

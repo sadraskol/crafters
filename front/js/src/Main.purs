@@ -3,6 +3,10 @@ module Main where
 import Prelude
 
 import Calendar (getWeekdaysInRange, getDate)
+import Components.SlotCell as SlotCell
+import Components.DateCell as DateCell
+import Components.TimeSlotCell as TimeSlotCell
+import Components.Container (Action(..))
 import Control.Monad.Aff.Console (CONSOLE, log)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Trans.Class (lift)
@@ -15,10 +19,6 @@ import React.DOM.Props as RP
 import Slot (TimeSlot(..))
 import Thermite as T
 import ThermiteUtils (defaultMain)
-import Components.SlotCell as SlotCell
-import Components.DateCell as DateCell
-import Components.TimeSlotCell as TimeSlotCell
-import Components.Container (Action(..))
 
 range :: Array Date
 range = getWeekdaysInRange (getDate 2017 Date.February 27) (getDate 2017 Date.March 29)
