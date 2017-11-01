@@ -35,10 +35,11 @@ getDaysInRange bottom up  | bottom < up  = [bottom] <> getWeekdaysInRange (addDa
                           | bottom == up = [bottom]
                           | otherwise    = getWeekdaysInRange up bottom
 
-frenchWeekday :: Date.Weekday -> String
-frenchWeekday Date.Monday = "Lundi"
-frenchWeekday Date.Tuesday = "Mardi"
-frenchWeekday Date.Wednesday = "Mercredi"
-frenchWeekday Date.Thursday = "Jeudi"
-frenchWeekday Date.Friday = "Vendredi"
-frenchWeekday _ = "???"
+frenchWeekday :: Date.Date -> String
+frenchWeekday date = case Date.weekday date of
+  Date.Monday -> "Lundi"
+  Date.Tuesday -> "Mardi"
+  Date.Wednesday -> "Mercredi"
+  Date.Thursday -> "Jeudi"
+  Date.Friday -> "Vendredi"
+  _ -> "???"

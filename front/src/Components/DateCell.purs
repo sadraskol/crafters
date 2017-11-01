@@ -1,0 +1,23 @@
+module Components.DateCell where
+
+import Prelude
+
+import Calendar (frenchWeekday)
+import Components.Container (Action(..))
+import Data.Date (Date)
+import Data.Date as Date
+import Data.Enum (fromEnum)
+import Preferences (Event(..), State)
+import React (ReactElement)
+import React.DOM as R
+import React.DOM.Props as RP
+
+render :: _ -> State -> Date -> ReactElement
+render dispatch state date =
+  R.td [ RP.onClick \_ -> dispatch $ Preference $ DateToggle date
+       , RP.style { cursor: "pointer"
+                  }
+       ] [R.text $ dateToString date]
+
+dateToString :: Date -> String
+dateToString date = (frenchWeekday date) <> " " <> (show $ fromEnum $ Date.day date)

@@ -1,4 +1,8 @@
-module Preferences where
+module Preferences ( State
+                   , Event(..)
+                   , applyPreferences
+                   , initialState
+                   ) where
 
 import Prelude
 
@@ -24,3 +28,6 @@ applyPreferences (DateToggle date) state = if any (\(Slot d _) -> d == date) sta
 applyPreferences (TimeSlotToggle timeslot range) state = if any (\(Slot _ t) -> t == timeslot) state
   then removeTimeSlot timeslot state
   else foldr insert state ((\d -> Slot d timeslot) <$> range)
+
+initialState :: State
+initialState = []
