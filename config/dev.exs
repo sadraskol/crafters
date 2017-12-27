@@ -51,7 +51,7 @@ config :phoenix, :stacktrace_depth, 20
 config :crafters, Crafters.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "malt_dev_password",
   database: "crafters_dev",
   hostname: "localhost",
   pool_size: 10

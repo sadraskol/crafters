@@ -7,6 +7,8 @@
 # Generated on crash by the VM
 erl_crash.dump
 
+/priv/static/js
+
 # Files matching config/*.secret.exs pattern contain sensitive
 # data and you should not commit them into version control.
 #
@@ -14,3 +16,7 @@ erl_crash.dump
 # secrets files as long as you replace their contents by environment
 # variables.
 /config/*.secret.exs
+
+*.iml
+/.idea
+*.swp

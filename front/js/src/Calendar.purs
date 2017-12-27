@@ -13,7 +13,7 @@ import Data.Time.Duration as Duration
 import Partial.Unsafe (unsafePartial)
 
 getDate :: Int -> Date.Month -> Int -> Date.Date
-getDate year month day = unsafePartial fromJust $ Date.canonicalDate <$> toEnum year <*> pure month <*> toEnum day
+getDate year month day = unsafePartial fromJust $ Date.canonicalDate <$> toEnum year <@> month <*> toEnum day
 
 addDay :: Int -> Date.Date -> Date.Date
 addDay x date = unsafePartial $ fromJust $ DateTime.date <$> DateTime.adjust (Duration.Days $ toNumber x) dateTime
