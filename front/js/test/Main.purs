@@ -14,7 +14,6 @@ import Data.Date as Date
 
 import Calendar (getDate, getWeekdaysInRange)
 
-import SlotTestSuite (slotTests)
 import PreferencesTest (preferencesTests)
 
 type Tests = Eff (console :: CONSOLE , testOutput :: TESTOUTPUT , avar :: AVAR) Unit
@@ -49,5 +48,4 @@ main = runTest do
                       ]
       let actual = getWeekdaysInRange (getDate 2017 Date.February 27) (getDate 2017 Date.March 29)
       Assert.equal expected actual
-  slotTests
   preferencesTests

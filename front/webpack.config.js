@@ -25,12 +25,12 @@ module.exports = {
     'app': ['./js/src/App.js', './css/app.scss'],
   },
   output: {
-    path: __dirname + '/../priv/static',
+    path: process.env.NODE_ENV == 'production' ? `${__dirname}/../priv/static` : `${__dirname}/dist`,
     pathinfo: true,
     filename: 'js/[name].js'
   },
 
-  devtool: 'source-map',
+  devtool: 'eval',
 
   resolve: {
     modules: [
@@ -79,7 +79,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production')
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
       }
     }),
     new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true }),

@@ -5,7 +5,9 @@ import Prelude
 import Components.Container (Action(..))
 import Data.Array (any)
 import Data.Date (Date)
-import Preferences (Event(..), State)
+import Data.Newtype (unwrap)
+import Preferences (Event(..))
+import State (State)
 import React (ReactElement)
 import React.DOM as R
 import React.DOM.Props as RP
@@ -23,7 +25,7 @@ render timeslot dispatch state date =
       ]
     ]
   where
-    isChecked = any (eq $ Slot date timeslot) state
+    isChecked = any (eq $ Slot date timeslot) (unwrap state).slots
     tdStyle = RP.style { "text-align": "center"
                        , padding: "1px"
                        , "min-width": "40px"

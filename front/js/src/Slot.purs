@@ -1,16 +1,19 @@
 module Slot
   ( TimeSlot(..)
   , Slot(..)
-  , slotsFromDates
-  , removeTimeSlot
-  , removeSlot
-  , removeDate
   ) where
 
 import Prelude
-import Data.Array (concatMap, filter)
-import Data.Date (Date)
+
+import Data.Argonaut.Core (Json, fromString, jsonEmptyObject)
+import Data.Argonaut.Decode (class DecodeJson, decodeJson, getField)
+import Data.Argonaut.Encode (class EncodeJson, encodeJson, (:=), (~>))
+import Data.Date (Date, canonicalDate, day, month, year)
+import Data.Either (Either(..))
+import Data.Enum (fromEnum, toEnum)
 import Data.Generic (class Generic)
+import Data.Maybe (fromJust)
+import Partial.Unsafe (unsafePartial)
 
 data Slot = Slot Date TimeSlot
 
@@ -22,24 +25,56 @@ instance showSlot :: Show Slot where
   show :: Slot -> String
   show (Slot d t) = show d <> " " <> show t
 
+
+getUnsafeDate :: Int -> Int -> Int -> Date
+getUnsafeDate year month day = unsafePartial fromJust $ canonicalDate <$> toEnum year <*> toEnum month <*> toEnum day
+
+instance decodeSlot :: DecodeJson Slot where
+  decodeJson :: Json -> Either String Slot
+  decodeJson json = do
+    obj <- decodeJson json
+    date <- getField obj "date"
+    day <- getField date "day"
+    month <- getField date "month"
+    year <- getField date "year"
+    timeslot <- getField obj "timeslot"
+    pure $ Slot (getUnsafeDate year month day) timeslot
+
+
+instance encodeSlot :: EncodeJson Slot where
+  encodeJson :: Slot -> Json
+  encodeJson (Slot date timeslot)
+    = encodeJson
+      ( "date" :=
+        ( "day" := (fromEnum $ day date)
+        ~> "month" := (fromEnum $ month date)
+        ~> "year" := (fromEnum $ year date)
+        ~> jsonEmptyObject
+        )
+      ~> "timeslot" := encodeJson timeslot
+      ~> jsonEmptyObject
+      )
+
 data TimeSlot = Lunch | Evening
 
 derive instance eqTimeSlot :: Eq TimeSlot
 derive instance ordTimeSlot :: Ord TimeSlot
 derive instance genericTimeSlot :: Generic TimeSlot
 
+instance decodeTimeSlot :: DecodeJson TimeSlot where
+  decodeJson :: Json -> Either String TimeSlot
+  decodeJson json = do
+    obj <- decodeJson json
+    case obj of
+      "lunch" -> pure $ Lunch
+      "evening" -> pure $ Evening
+      any -> Left ("TimeSlot DecodeJson: " <> any <> " is not (lunch|evening)")
+
+instance encodeTimeSlot :: EncodeJson TimeSlot where
+  encodeJson :: TimeSlot -> Json
+  encodeJson Lunch = fromString "lunch"
+  encodeJson Evening = fromString "evening"
+
 instance showTimeSlot :: Show TimeSlot where
   show Lunch = "Lunch"
   show Evening = "Evening"
-
-slotsFromDates :: Array Date -> Array Slot
-slotsFromDates = concatMap \date -> [ Slot date Lunch, Slot date Evening ]
-
-removeTimeSlot :: TimeSlot -> Array Slot -> Array Slot
-removeTimeSlot timeslot = filter \(Slot _d t) -> t /= timeslot
-
-removeSlot :: Slot -> Array Slot -> Array Slot
-removeSlot slot = filter \s-> s /= slot
-
-removeDate :: Date -> Array Slot -> Array Slot
-removeDate date = filter \(Slot d _t) -> d /= date

@@ -17,11 +17,11 @@ defmodule CraftersWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    get "/preferences", PreferenceController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", CraftersWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", CraftersWeb.Api do
+    pipe_through :api
+
+    post "/preferences/:id", PreferencesController, :submit_preferences
+  end
 end

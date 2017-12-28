@@ -5,3 +5,4 @@ import Preferences (Event)
 data Action
   = Submit
   | Preference Event
+  | Name String
