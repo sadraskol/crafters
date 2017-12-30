@@ -17,9 +17,13 @@ import DOM.HTML.Window (document)
 import DOM.Node.Node (textContent)
 import DOM.Node.NonElementParentNode (getElementById)
 import DOM.Node.Types (ElementId(..), documentToNonElementParentNode, elementToNode)
+import Data.Argonaut.Core (fromString)
+import Data.Argonaut.Decode (decodeJson)
 import Data.Argonaut.Encode (encodeJson)
+import Data.Argonaut.Parser (jsonParser)
 import Data.Date (Date)
 import Data.Date as Date
+import Data.Either (Either(..))
 import Data.Maybe (Maybe(..), fromJust, fromMaybe)
 import Data.Newtype (unwrap)
 import Preferences (applyPreferences)
@@ -28,13 +32,11 @@ import React.DOM as R
 import React.DOM.Props as RP
 import Slot (TimeSlot(..))
 import State (State, changeName, initialState)
+import StaticProps (StaticProps(..))
 import Thermite (EventHandler)
 import Thermite as T
 import ThermiteUtils (defaultMain)
 import Unsafe.Coerce (unsafeCoerce)
-
-range :: Array Date
-range = getWeekdaysInRange (getDate 2017 Date.February 27) (getDate 2017 Date.March 29)
 
 getInit :: Eff _ String
 getInit = do
@@ -45,8 +47,8 @@ getInit = do
     Nothing -> pure ""
     Just el -> textContent <<< elementToNode $ el
 
-render :: forall a. T.Render State a Action
-render dispatch _ state _ =
+render :: T.Render State StaticProps Action
+render dispatch props state _ =
   [ R.table [] [
       R.tbody [] [
         R.tr [] ([R.td' []] <> (dateCell <$> range)),
@@ -54,13 +56,17 @@ render dispatch _ state _ =
         R.tr [] (renderLine Evening range)
       ]
     ],
-    R.ul' $ (\slot -> R.li' [R.text $ show slot]) <$> (unwrap state).slots,
-    R.input [ RP.value $ fromMaybe "" (unwrap state).name
-            , RP.onChange $ dispatchName dispatch] [],
+    R.label [] [
+      R.span' [R.text "Ton nom: "],
+      R.input [ RP.value $ fromMaybe "" (unwrap state).name
+              , RP.onChange $ dispatchName dispatch] []
+    ],
     R.button [RP.onClick \_ -> dispatch $ Submit] [R.text "Valider"]
   ]
 
   where
+    range :: Array Date
+    range = (unwrap props).range
     renderLine :: TimeSlot -> Array Date -> Array ReactElement
     renderLine timeslot range
       = ([TimeSlotTitle.render timeslot range dispatch state]
@@ -70,18 +76,21 @@ render dispatch _ state _ =
 dispatchName :: (Action -> EventHandler) -> Event -> EventHandler
 dispatchName dispatch e = dispatch $ Name $ (unsafeCoerce e).target.value
 
-performAction :: forall a e. T.PerformAction _ State a Action
+performAction :: T.PerformAction _ State StaticProps Action
 performAction (Name name) _ state = void $ T.cotransform $ changeName name
 performAction (Preference event) _ _ = void $ T.cotransform $ applyPreferences event
-performAction Submit _ state = do
-  _ <- lift $ post_ "/api/preferences/id" (encodeJson state)
+performAction Submit props state = do
+  _ <- lift $ post_ ("/api/preferences/" <> (unwrap props).id) (encodeJson state)
   void $ T.cotransform id
 
-spec :: forall a e. T.Spec _ State a Action
+spec :: forall e. T.Spec _ State StaticProps Action
 spec = T.simpleSpec performAction render
 
 main :: forall e. Eff _ Unit
 main = do
   str <- getInit
-  log str
-  defaultMain spec initialState unit
+  case decodeJson =<< jsonParser str of
+    Right props -> defaultMain spec initialState props
+    Left message -> do
+      log ("error: " <> message)
+      defaultMain spec initialState (StaticProps {id: "", range: []})

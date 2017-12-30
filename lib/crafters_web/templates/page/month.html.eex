@@ -1,0 +1,15 @@
+<h2>Préférences pour le mois <%= Date.to_iso8601(@month.start) %> &rarr; <%= Date.to_iso8601(@month.last) %></h2>
+<ul>
+<%= for preference <- @month.preferences do %>
+    <li>
+        <%= preference.name %>
+        -
+        <%= for slot <- preference.slots do %>
+            <%= Date.to_iso8601(slot.date) %> - <%= slot.timeslot %>
+        <% end %>
+    </li>
+<% end %>
+    <li>
+    <%= link "ajouter préférences", to: page_path(@conn, :new_preference, @month.id) %>
+    </li>
+</ul>

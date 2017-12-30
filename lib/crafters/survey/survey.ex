@@ -1,104 +1,52 @@
 defmodule Crafters.Survey do
-  @moduledoc """
-  The Survey context.
-  """
 
   import Ecto.Query, warn: false
   alias Crafters.Repo
 
-  alias Crafters.Survey.Preference
+  alias Crafters.Survey.{Preference, Month, Slot}
 
-  @doc """
-  Returns the list of preferences.
+  def get_all_months(), do: Repo.all(Month)
 
-  ## Examples
+  def get_month!(id) do
+    month = Repo.get!(Month, id)
+            |> Repo.preload preferences: :slots
 
-      iex> list_preferences()
-      [%Preference{}, ...]
-
-  """
-  def list_preferences do
-    Repo.all(Preference)
+    range = Date.range(month.start, month.last)
+            |> Enum.filter(fn (date) -> !Enum.member?([6, 7], Date.day_of_week(date)) end)
+            |> Enum.map(
+                 fn (date) ->
+                   %{
+                     day: date.day,
+                     month: date.month,
+                     year: date.year
+                   }
+                 end
+               )
+            |> Enum.to_list()
+    Map.put(month, :range, range)
   end
 
-  @doc """
-  Gets a single preference.
-
-  Raises `Ecto.NoResultsError` if the Preference does not exist.
-
-  ## Examples
-
-      iex> get_preference!(123)
-      %Preference{}
-
-      iex> get_preference!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_preference!(id), do: Repo.get!(Preference, id)
-
-  @doc """
-  Creates a preference.
-
-  ## Examples
-
-      iex> create_preference(%{field: value})
-      {:ok, %Preference{}}
-
-      iex> create_preference(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_preference(attrs \\ %{}) do
-    %Preference{}
-    |> Preference.changeset(attrs)
+  def put_month(attrs \\ %{}) do
+    %Month{}
+    |> Month.changeset(attrs)
     |> Repo.insert()
   end
 
-  @doc """
-  Updates a preference.
-
-  ## Examples
-
-      iex> update_preference(preference, %{field: new_value})
-      {:ok, %Preference{}}
-
-      iex> update_preference(preference, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_preference(%Preference{} = preference, attrs) do
-    preference
-    |> Preference.changeset(attrs)
-    |> Repo.update()
+  def delete_month(id) do
+    Repo.get!(Month, id)
+    |> Repo.delete!()
   end
 
-  @doc """
-  Deletes a Preference.
-
-  ## Examples
-
-      iex> delete_preference(preference)
-      {:ok, %Preference{}}
-
-      iex> delete_preference(preference)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_preference(%Preference{} = preference) do
-    Repo.delete(preference)
+  def new_month() do
+    %Month{start: Date.utc_today(), last: Date.utc_today()}
+    |> Ecto.Changeset.cast(%{}, [:start, :last])
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking preference changes.
-
-  ## Examples
-
-      iex> change_preference(preference)
-      %Ecto.Changeset{source: %Preference{}}
-
-  """
-  def change_preference(%Preference{} = preference) do
-    Preference.changeset(preference, %{})
+  def put_preference(id, name, slots) do
+    Repo.get!(Month, id)
+    |> Ecto.build_assoc(:preferences)
+    |> Preference.changeset(%{name: name, slots: slots})
+    |> Repo.insert()
   end
+
 end

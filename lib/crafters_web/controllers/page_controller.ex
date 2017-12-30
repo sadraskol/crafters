@@ -2,19 +2,32 @@ defmodule CraftersWeb.PageController do
   use CraftersWeb, :controller
 
   def index(conn, _params) do
-    range = Date.range(~D[2017-10-01], ~D[2017-10-31])
-    |> Enum.map(fn(date) ->
-      %{
-        day: date.day,
-        month: date.month,
-        year: date.year
-      }
-    end)
-    |> Enum.to_list()
-    init = Poison.encode!(%{
-      range: range,
-      id: "super_id"
-    })
-    render conn, "index.html", init: init
+    months = Crafters.Survey.get_all_months()
+    render conn, "index.html", months: months
+  end
+
+  def new_month(conn, _params) do
+    render conn, "new_month.html", changeset: Crafters.Survey.new_month()
+  end
+
+  def create_month(conn, %{"month" => month}) do
+    Crafters.Survey.put_month(month)
+    redirect conn, to: page_path(conn, :index)
+  end
+
+  def delete_month(conn, %{"id" => id}) do
+    Crafters.Survey.delete_month(id)
+    redirect conn, to: page_path(conn, :index)
+  end
+
+  def month(conn, %{"id" => id}) do
+    month = Crafters.Survey.get_month!(id)
+    render conn, "month.html", month: month
+  end
+
+  def new_preference(conn, %{"id" => month_id}) do
+    month = Crafters.Survey.get_month!(month_id)
+            |> Poison.encode!()
+    render conn, "preference.html", init: month
   end
 end
