@@ -1,10 +1,10 @@
 <ul>
-<%= for month <- @months do %>
+  <%= for month <- @months do %>
     <li>
-        <%= link "month " <> Date.to_iso8601(month.start), to: page_path(@conn, :month, month.id) %>
-        -
-        <%= link "effacer", to: page_path(@conn, :delete_month, month.id) %>
+      <%= link "month " <> Date.to_iso8601(month.start), to: page_path(@conn, :month, month.id) %>
+      -
+      <%= link "effacer", to: page_path(@conn, :delete_month, month.id) %>
     </li>
-<% end %>
-    <li><%= link "new month", to: page_path(@conn, :new_month) %></li>
+  <% end %>
+  <li><%= link "new month", to: page_path(@conn, :new_month) %></li>
 </ul>

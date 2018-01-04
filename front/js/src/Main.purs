@@ -1,31 +1,31 @@
 module Main where
 
 import Network.HTTP.Affjax
-import Prelude
+import Prelude (Unit, bind, discard, id, pure, void, ($), (<$>), (<<<), (<>), (=<<))
 
-import Calendar (getWeekdaysInRange, getDate)
 import Components.Container (Action(..))
 import Components.DateTitle as DateTitle
 import Components.SlotCell as SlotCell
 import Components.TimeSlotTitle as TimeSlotTitle
 import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Console (log)
 import Control.Monad.Trans.Class (lift)
 import DOM.HTML (window)
+import DOM.HTML.Location (assign)
 import DOM.HTML.Types (htmlDocumentToNonElementParentNode)
-import DOM.HTML.Window (document)
+import DOM.HTML.Window (document, location)
 import DOM.Node.Node (textContent)
 import DOM.Node.NonElementParentNode (getElementById)
-import DOM.Node.Types (ElementId(..), documentToNonElementParentNode, elementToNode)
-import Data.Argonaut.Core (fromString)
+import DOM.Node.Types (ElementId(..), elementToNode)
 import Data.Argonaut.Decode (decodeJson)
 import Data.Argonaut.Encode (encodeJson)
 import Data.Argonaut.Parser (jsonParser)
 import Data.Date (Date)
-import Data.Date as Date
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(..), fromJust, fromMaybe)
+import Data.Maybe (Maybe(Just, Nothing), fromMaybe)
 import Data.Newtype (unwrap)
+import Network.HTTP.StatusCode (StatusCode(..))
 import Preferences (applyPreferences)
 import React (Event, ReactElement)
 import React.DOM as R
@@ -80,8 +80,15 @@ performAction :: T.PerformAction _ State StaticProps Action
 performAction (Name name) _ state = void $ T.cotransform $ changeName name
 performAction (Preference event) _ _ = void $ T.cotransform $ applyPreferences event
 performAction Submit props state = do
-  _ <- lift $ post_ ("/api/preferences/" <> (unwrap props).id) (encodeJson state)
+  response <- lift $ post_ ("/api/preferences/" <> monthId) (encodeJson state)
+  case response of
+    {status: StatusCode 200} -> liftEff $ (assign $ "/month/" <> monthId) =<< (location =<< window)
+    _ -> liftEff $ log "failure"
   void $ T.cotransform id
+
+    where
+      monthId :: String
+      monthId = (unwrap props).id
 
 spec :: forall e. T.Spec _ State StaticProps Action
 spec = T.simpleSpec performAction render

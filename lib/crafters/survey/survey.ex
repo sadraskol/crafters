@@ -8,22 +8,10 @@ defmodule Crafters.Survey do
   def get_all_months(), do: Repo.all(Month)
 
   def get_month!(id) do
-    month = Repo.get!(Month, id)
-            |> Repo.preload preferences: :slots
-
-    range = Date.range(month.start, month.last)
-            |> Enum.filter(fn (date) -> !Enum.member?([6, 7], Date.day_of_week(date)) end)
-            |> Enum.map(
-                 fn (date) ->
-                   %{
-                     day: date.day,
-                     month: date.month,
-                     year: date.year
-                   }
-                 end
-               )
-            |> Enum.to_list()
-    Map.put(month, :range, range)
+    Repo.get!(Month, id)
+    |> Repo.preload(preferences: :slots)
+    |> Month.list_best_dates()
+    |> Month.set_range()
   end
 
   def put_month(attrs \\ %{}) do
@@ -48,5 +36,4 @@ defmodule Crafters.Survey do
     |> Preference.changeset(%{name: name, slots: slots})
     |> Repo.insert()
   end
-
 end

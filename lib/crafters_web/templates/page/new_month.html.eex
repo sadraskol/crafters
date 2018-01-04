@@ -1,5 +1,5 @@
 <%= form_for @changeset, page_path(@conn, :create_month), fn f -> %>
-    <p><label>Début: <%= date_select f, :start %></label></p>
-    <p><label>Fin: <%= date_select f, :last %></label></p>
-    <%= submit "Create" %>
+  <p><label>Début: <%= date_select f, :start %></label></p>
+  <p><label>Fin: <%= date_select f, :last %></label></p>
+  <%= submit "Create" %>
 <% end %>

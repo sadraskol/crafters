@@ -1,2 +1,3 @@
 <div id="app"></div>
 <script id="init-props" type="application/json"><%= raw @init %></script>
+<script src="<%= static_path(@conn, "/js/app.js") %>"></script>

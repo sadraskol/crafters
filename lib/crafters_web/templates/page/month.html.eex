@@ -1,15 +1,29 @@
 <h2>Préférences pour le mois <%= Date.to_iso8601(@month.start) %> &rarr; <%= Date.to_iso8601(@month.last) %></h2>
 <ul>
-<%= for preference <- @month.preferences do %>
+  <%= for preference <- @month.preferences do %>
     <li>
-        <%= preference.name %>
-        -
-        <%= for slot <- preference.slots do %>
-            <%= Date.to_iso8601(slot.date) %> - <%= slot.timeslot %>
-        <% end %>
+      <%= preference.name %>
+      -
+      <%= for slot <- preference.slots do %>
+        <%= Date.to_iso8601(slot.date) %> - <%= slot.timeslot %>;
+      <% end %>
     </li>
-<% end %>
-    <li>
-    <%= link "ajouter préférences", to: page_path(@conn, :new_preference, @month.id) %>
-    </li>
+  <% end %>
+  <li>
+  <%= link "ajouter mes préférences", to: page_path(@conn, :new_preference, @month.id) %>
+  </li>
+</ul>
+
+<h3>Meilleurs Candidat pour le Midi</h3>
+<ul>
+  <%= for best <- @month.best_lunches do %>
+    <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
+  <% end %>
+</ul>
+
+<h3>Meilleurs Candidat pour le Soir</h3>
+<ul>
+  <%= for best <- @month.best_evenings do %>
+    <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
+  <% end %>
 </ul>
