@@ -30,10 +30,10 @@ defmodule Crafters.Survey do
     |> Ecto.Changeset.cast(%{}, [:start, :last])
   end
 
-  def put_preference(id, name, slots) do
+  def put_preference(id, name, slots, activities \\ []) do
     Repo.get!(Month, id)
     |> Ecto.build_assoc(:preferences)
-    |> Preference.changeset(%{name: name, slots: slots})
+    |> Preference.changeset(%{name: name, slots: slots, activities: activities})
     |> Repo.insert()
   end
 end

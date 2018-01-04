@@ -56,12 +56,17 @@ render dispatch props state _ =
         R.tr [] (renderLine Evening range)
       ]
     ],
-    R.label [] [
+    R.ul' [
+      R.li' [ R.label' [ (R.input [ RP._type "checkbox" ] []), R.text " DDD" ]]
+    , R.li' [ R.label' [ (R.input [ RP._type "checkbox" ] []), R.text " Coding dojo du soir" ]]
+    , R.li' [ R.label' [ (R.input [ RP._type "checkbox" ] []), R.text " Coding dojo du midi" ]]
+    ],
+    R.p' [ R.label [] [
       R.span' [R.text "Ton nom: "],
       R.input [ RP.value $ fromMaybe "" (unwrap state).name
               , RP.onChange $ dispatchName dispatch] []
-    ],
-    R.button [RP.onClick \_ -> dispatch $ Submit] [R.text "Valider"]
+    ]],
+    R.p' [ R.button [RP.onClick \_ -> dispatch $ Submit] [R.text "Valider"] ]
   ]
 
   where
