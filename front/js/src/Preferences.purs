@@ -13,12 +13,13 @@ import Data.Date (Date)
 import Data.Foldable (any)
 import Data.Newtype (unwrap)
 import Slot (Slot(..), TimeSlot(..))
-import State (State, changeSlots, initialState)
+import State (Activity, State, changeSlots, initialState, addActivity, removeActivity)
 
 data Event
   = SingleToggle Slot
   | DateToggle Date
   | TimeSlotToggle TimeSlot (Array Date)
+  | ActivityToggle Activity
 
 applyPreferences :: Event -> State -> State
 applyPreferences (SingleToggle slot) state = if any (eq slot) (unwrap state).slots
@@ -30,6 +31,9 @@ applyPreferences (DateToggle date) state = if any (\(Slot d _) -> d == date) (un
 applyPreferences (TimeSlotToggle timeslot range) state = if any (\(Slot _ t) -> t == timeslot) (unwrap state).slots
   then removeTimeSlot timeslot state
   else changeSlots (\slots -> foldr insert slots ((\d -> Slot d timeslot) <$> range)) state
+applyPreferences (ActivityToggle activity) state = if any (\a -> a == activity) (unwrap state).activities
+  then removeActivity activity state
+  else addActivity activity state
 
 slotsFromDates :: Array Date -> State
 slotsFromDates arr = changeSlots (const $ range arr) initialState

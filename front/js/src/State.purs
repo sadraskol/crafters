@@ -1,4 +1,4 @@
-module State (State(..), initialState, changeSlots, changeName, Activity(..)) where
+module State (State(..), initialState, changeSlots, changeName, Activity(..), addActivity, removeActivity) where
 
 import Prelude
 
@@ -104,5 +104,5 @@ removeActivity :: Activity -> State -> State
 removeActivity activity state =
   State { slots: (unwrap state).slots
         , name: (unwrap state).name
-        , activities: filter ((==) activity) (unwrap state).activities
+        , activities: filter ((/=) activity) (unwrap state).activities
         }

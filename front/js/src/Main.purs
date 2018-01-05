@@ -7,6 +7,7 @@ import Components.Container (Action(..))
 import Components.DateTitle as DateTitle
 import Components.SlotCell as SlotCell
 import Components.TimeSlotTitle as TimeSlotTitle
+import Components.ActivityPicker as ActivityPicker
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Console (log)
@@ -56,11 +57,7 @@ render dispatch props state _ =
         R.tr [] (renderLine Evening range)
       ]
     ],
-    R.ul' [
-      R.li' [ R.label' [ (R.input [ RP._type "checkbox" ] []), R.text " DDD" ]]
-    , R.li' [ R.label' [ (R.input [ RP._type "checkbox" ] []), R.text " Coding dojo du soir" ]]
-    , R.li' [ R.label' [ (R.input [ RP._type "checkbox" ] []), R.text " Coding dojo du midi" ]]
-    ],
+    ActivityPicker.render dispatch state,
     R.p' [ R.label [] [
       R.span' [R.text "Ton nom: "],
       R.input [ RP.value $ fromMaybe "" (unwrap state).name
