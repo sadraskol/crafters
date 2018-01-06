@@ -15,7 +15,6 @@ defmodule Crafters.Survey.Slot do
   end
 
   def changeset(%Slot{} = slot, %{"date" => %{"year" => year, "month" => month, "day" => day}, "timeslot" => timeslot}) do
-    slot
-    |> cast(%{"date" => Date.from_erl!({year, month, day}), "timeslot" => timeslot}, [:date, :timeslot])
+    cast(slot, %{ "date" => Date.from_erl!({year, month, day}), "timeslot" => timeslot}, [:date, :timeslot])
   end
 end

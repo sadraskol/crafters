@@ -11,7 +11,6 @@ import Prelude
 import Activity (Activity)
 import Control.Monad.Aff (launchAff_)
 import Control.Monad.Aff.Console (log)
-import Control.Monad.Eff (runPure)
 import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Unsafe (unsafePerformEff)
 import DOM.HTML (window)
@@ -21,13 +20,12 @@ import Data.Argonaut.Encode (encodeJson)
 import Data.Array (concatMap, filter, foldr, insert)
 import Data.Date (Date)
 import Data.Foldable (any)
-import Data.Newtype (class Newtype, unwrap)
+import Data.Newtype (unwrap)
 import Network.HTTP.Affjax (post_)
 import Network.HTTP.StatusCode (StatusCode(..))
 import Slot (Slot(..), TimeSlot(..))
 import State (State, addActivity, changeName, changeSlots, initialState, removeActivity)
-import StaticProps (StaticProps(..))
-import Unsafe.Coerce (unsafeCoerce)
+import StaticProps (StaticProps)
 
 data DomainEvent
   = SingleToggle Slot

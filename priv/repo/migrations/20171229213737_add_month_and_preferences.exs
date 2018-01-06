@@ -14,14 +14,14 @@ defmodule Crafters.Repo.Migrations.AddMonthAndPreferences do
       add :date, :date
       add :timeslot, :string
 
-      add :preference_id, references(:preferences, type: :binary_id)
+      add :preference_id, references(:preferences, type: :binary_id, on_delete: :delete_all)
 
       timestamps()
     end
 
     alter table(:preferences) do
       add :name, :string
-      add :month_id, references(:months, type: :binary_id)
+      add :month_id, references(:months, type: :binary_id, on_delete: :delete_all)
     end
   end
 end

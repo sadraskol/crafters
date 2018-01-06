@@ -13,7 +13,7 @@ defmodule Crafters.Survey.Month do
     field :best_lunches, :any, virtual: true
     field :best_evenings, :any, virtual: true
 
-    has_many :preferences, Crafters.Survey.Preference
+    has_many :preferences, Crafters.Survey.Preference, on_delete: :delete_all
     timestamps()
   end
 
