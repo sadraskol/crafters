@@ -1,43 +1,16 @@
-module State (State(..), initialState, changeSlots, changeName, Activity(..), addActivity, removeActivity) where
+module State (State(..), initialState, changeSlots, changeName, addActivity, removeActivity) where
 
 import Prelude
 
-import Data.Argonaut.Core (Json, fromString, jsonEmptyObject)
+import Activity (Activity)
+import Data.Argonaut.Core (Json, jsonEmptyObject)
 import Data.Argonaut.Decode (class DecodeJson, decodeJson, getField, getFieldOptional)
 import Data.Argonaut.Encode (class EncodeJson, encodeJson, (:=), (~>))
 import Data.Array (filter, (:))
-import Data.Either (Either(Left))
+import Data.Either (Either)
 import Data.Maybe (Maybe(..))
 import Data.Newtype (class Newtype, unwrap)
 import Slot (Slot)
-
-data Activity
-  = DDD
-  | LunchDojo
-  | EveningDojo
-
-derive instance eqActivity :: Eq Activity
-instance showActivity :: Show Activity where
-  show :: Activity -> String
-  show DDD = "DDD"
-  show LunchDojo = "Dojo du midi"
-  show EveningDojo = "Dojo du soir"
-
-instance decodeActivity :: DecodeJson Activity where
-  decodeJson :: Json -> Either String Activity
-  decodeJson json = do
-    obj <- decodeJson json
-    case obj of
-      "ddd" -> pure DDD
-      "lunch_dojo" -> pure LunchDojo
-      "evening_dojo" -> pure EveningDojo
-      any -> Left ("Activity DecodeJson: " <> any <> " is not (ddd|lunch_dojo|evening_dojo)")
-
-instance encodeActivity :: EncodeJson Activity where
-  encodeJson :: Activity -> Json
-  encodeJson DDD = fromString "ddd"
-  encodeJson LunchDojo = fromString "lunch_dojo"
-  encodeJson EveningDojo = fromString "evening_dojo"
 
 newtype State =
   State { slots :: Array Slot

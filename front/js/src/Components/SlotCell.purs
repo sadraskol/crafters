@@ -2,11 +2,10 @@ module Components.SlotCell (render) where
 
 import Prelude
 
-import Components.Container (Action(..))
 import Data.Array (any)
 import Data.Date (Date)
 import Data.Newtype (unwrap)
-import Preferences (Event(..))
+import Preferences (DomainEvent(..))
 import State (State)
 import React (ReactElement)
 import React.DOM as R
@@ -20,7 +19,7 @@ render timeslot dispatch state date =
       [ R.input [ RP._type "checkbox"
                 , inputStyle
                 , RP.checked isChecked
-                , RP.onClick \_ -> dispatch $ Preference $ SingleToggle $ Slot date timeslot
+                , RP.onClick \_ -> dispatch $ SingleToggle $ Slot date timeslot
                 ] []
       ]
     ]
