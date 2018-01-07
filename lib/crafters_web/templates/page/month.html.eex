@@ -1,8 +1,12 @@
-<h2>Préférences pour le mois <%= Date.to_iso8601(@month.start) %> &rarr; <%= Date.to_iso8601(@month.last) %></h2>
+<h2>Préférences pour la période du <%= Date.to_iso8601(@month.start) %> au <%= Date.to_iso8601(@month.last) %></h2>
 <ul>
   <%= for preference <- @month.preferences do %>
     <li>
       <%= preference.name %>
+      -
+      <%= for activity <- preference.activities do %>
+        <%= activity.name %>;
+      <% end %>
       -
       <%= for slot <- preference.slots do %>
         <%= Date.to_iso8601(slot.date) %> - <%= slot.timeslot %>;
@@ -14,21 +18,21 @@
   </li>
 </ul>
 
-<h3>Meilleurs candidat pour le DDD</h3>
+<h3>Meilleures dates pour le DDD</h3>
 <ul>
   <%= for best <- @month.best_ddd do %>
     <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
   <% end %>
 </ul>
 
-<h3>Meilleurs candidat pour le Dojo du soir</h3>
+<h3>Meilleures dates pour le Dojo du soir</h3>
 <ul>
   <%= for best <- @month.best_evening_dojo do %>
     <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
   <% end %>
 </ul>
 
-<h3>Meilleurs candidat pour le Dojo du midi</h3>
+<h3>Meilleures dates pour le Dojo du midi</h3>
 <ul>
   <%= for best <- @month.best_lunch_dojo do %>
     <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>

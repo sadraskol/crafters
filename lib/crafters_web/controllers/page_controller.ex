@@ -1,6 +1,11 @@
 defmodule CraftersWeb.PageController do
   use CraftersWeb, :controller
 
+  def current_month(conn, _params) do
+    month = Crafters.Survey.get_current_month
+    render conn, "month.html", month: month
+  end
+
   def index(conn, _params) do
     months = Crafters.Survey.get_all_months()
     render conn, "index.html", months: months
@@ -23,6 +28,11 @@ defmodule CraftersWeb.PageController do
   def month(conn, %{"id" => id}) do
     month = Crafters.Survey.get_month!(id)
     render conn, "month.html", month: month
+  end
+
+  def set_current_month(conn, %{"id" => id}) do
+    Crafters.Survey.set_current_month(id)
+    redirect conn, to: page_path(conn, :index)
   end
 
   def new_preference(conn, %{"id" => month_id}) do

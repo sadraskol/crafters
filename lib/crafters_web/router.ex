@@ -16,11 +16,14 @@ defmodule CraftersWeb.Router do
   scope "/", CraftersWeb do
     pipe_through :browser # Use the default browser stack
 
+    get "/current_month", PageController, :current_month
+
     get "/", PageController, :index
 
     get "/new_month", PageController, :new_month
     post "/create_month", PageController, :create_month
     get "/delete_month/:id", PageController, :delete_month
+    get "/current_month/:id", PageController, :set_current_month
 
     get "/month/:id", PageController, :month
     get "/month/:id/new_preference", PageController, :new_preference

@@ -9,6 +9,7 @@ defmodule Crafters.Survey.Month do
   schema "months" do
     field :start, :date
     field :last, :date
+    field :current, :boolean
     field :range, :any, virtual: true
     field :best_ddd, :any, virtual: true
     field :best_evening_dojo, :any, virtual: true

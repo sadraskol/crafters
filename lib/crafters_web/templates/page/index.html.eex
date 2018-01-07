@@ -3,6 +3,8 @@
     <li>
       <%= link "month " <> Date.to_iso8601(month.start), to: page_path(@conn, :month, month.id) %>
       -
+      <%= link "définir comme défaut", to: page_path(@conn, :set_current_month, month.id) %>
+      -
       <%= link "effacer", to: page_path(@conn, :delete_month, month.id) %>
     </li>
   <% end %>
