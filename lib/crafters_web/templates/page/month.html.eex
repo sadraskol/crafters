@@ -14,16 +14,23 @@
   </li>
 </ul>
 
-<h3>Meilleurs Candidat pour le Midi</h3>
+<h3>Meilleurs candidat pour le DDD</h3>
 <ul>
-  <%= for best <- @month.best_lunches do %>
+  <%= for best <- @month.best_ddd do %>
     <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
   <% end %>
 </ul>
 
-<h3>Meilleurs Candidat pour le Soir</h3>
+<h3>Meilleurs candidat pour le Dojo du soir</h3>
 <ul>
-  <%= for best <- @month.best_evenings do %>
+  <%= for best <- @month.best_evening_dojo do %>
+    <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
+  <% end %>
+</ul>
+
+<h3>Meilleurs candidat pour le Dojo du midi</h3>
+<ul>
+  <%= for best <- @month.best_lunch_dojo do %>
     <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
   <% end %>
 </ul>

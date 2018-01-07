@@ -1,7 +1,7 @@
 defmodule Crafters.Survey.Month do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Crafters.Survey.Month
+  alias Crafters.Survey.{Activity, Month}
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -10,8 +10,9 @@ defmodule Crafters.Survey.Month do
     field :start, :date
     field :last, :date
     field :range, :any, virtual: true
-    field :best_lunches, :any, virtual: true
-    field :best_evenings, :any, virtual: true
+    field :best_ddd, :any, virtual: true
+    field :best_evening_dojo, :any, virtual: true
+    field :best_lunch_dojo, :any, virtual: true
 
     has_many :preferences, Crafters.Survey.Preference, on_delete: :delete_all
     timestamps()
@@ -24,22 +25,28 @@ defmodule Crafters.Survey.Month do
   end
 
   def list_best_dates(%Month{} = month) do
-    bests = month.preferences
+    month
+    |> Map.put(:best_ddd, show_best_dates(month, "ddd"))
+    |> Map.put(:best_evening_dojo, show_best_dates(month, "evening_dojo"))
+    |> Map.put(:best_lunch_dojo, show_best_dates(month, "lunch_dojo"))
+  end
+
+  defp show_best_dates(month, activity) do
+    month.preferences
+    |> Enum.filter(fn(preference) -> contains_activity(preference.activities, activity) end)
     |> Enum.flat_map(fn(preference) -> preference.slots end)
     |> Enum.group_by(fn(slot) -> {slot.date, slot.timeslot} end)
     |> Enum.map(fn({key, group}) -> {key, Enum.count(group)} end)
     |> Enum.sort_by(&elem(&1, 1), &>=/2)
-
-    month
-    |> Map.put(:best_lunches, show_only_dates(bests, "lunch"))
-    |> Map.put(:best_evenings, show_only_dates(bests, "evening"))
-  end
-
-  defp show_only_dates(bests, timeslot) do
-    bests
-    |> Enum.filter(fn({key, _count}) -> elem(key, 1) == timeslot end)
+    |> Enum.filter(fn({key, _count}) -> elem(key, 1) == Activity.timeslot(activity) end)
     |> Enum.take(5)
     |> Enum.map(fn({key, count}) -> { elem(key, 0), count } end)
+  end
+
+  defp contains_activity(activities, activity) do
+    activities
+    |> Enum.map(fn(activity) -> activity.name end)
+    |> Enum.member?(activity)
   end
 
   def set_range(%Month{} = month) do

@@ -9,7 +9,7 @@ defmodule Crafters.Survey do
 
   def get_month!(id) do
     Repo.get!(Month, id)
-    |> Repo.preload(preferences: :slots)
+    |> Repo.preload(preferences: [:slots, :activities])
     |> Month.list_best_dates()
     |> Month.set_range()
   end

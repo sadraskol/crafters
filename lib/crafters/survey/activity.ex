@@ -22,4 +22,8 @@ defmodule Crafters.Survey.Activity do
   def from_name(name) do
     %{"name" => name}
   end
+
+  def timeslot("ddd"), do: "evening"
+  def timeslot("evening_dojo"), do: "evening"
+  def timeslot("lunch_dojo"), do: "lunch"
 end
