@@ -7,13 +7,27 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello Crafters!</title>
+    <title>Lyon Crafters Date</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
   <body>
-    <main role="main">
-      <%= render @view_module, @view_template, assigns %>
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Lyon Crafters Date
+          </h1>
+          <h2 class="subtitle">
+            Choisir la meilleure date pour les prochains événements
+          </h2>
+        </div>
+      </div>
+    </section>
+    <main role="main" class="container">
+      <section class="section">
+        <%= render @view_module, @view_template, assigns %>
+      </section>
     </main>
   </body>
 </html>

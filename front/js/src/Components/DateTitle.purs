@@ -2,7 +2,7 @@ module Components.DateTitle where
 
 import Prelude
 
-import Calendar (frenchWeekday)
+import Calendar (frenchWeekday, frenchMonth)
 import Data.Date (Date)
 import Data.Date as Date
 import Data.Enum (fromEnum)
@@ -14,12 +14,16 @@ import React.DOM.Props as RP
 
 render :: _ -> State -> Date -> ReactElement
 render dispatch _ date =
-  R.td [ RP.onClick \_ -> dispatch $ DateToggle date
+  R.li [ RP.onClick \_ -> dispatch $ DateToggle date
        , RP.style { cursor: "pointer"
                   , padding: "3px"
                   , "margin-right": "2px"
                   }
-       ] [R.text $ dateToString date]
+       , RP.className "table-header has-text-centered"
+       ] $ dateToElement date
 
-dateToString :: Date -> String
-dateToString date = (frenchWeekday date) <> " " <> (show $ fromEnum $ Date.day date)
+dateToElement :: Date -> Array ReactElement
+dateToElement date
+  = [ R.div' [ R.text (frenchWeekday date) ]
+    , R.div [RP.className "has-text-weight-bold"] [ R.text (show $ fromEnum $ Date.day date) ]
+    , R.div' [ R.text (frenchMonth date) ] ]

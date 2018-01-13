@@ -1,4 +1,4 @@
-module Calendar (getDate, getWeekdaysInRange, frenchWeekday) where
+module Calendar (getDate, getWeekdaysInRange, frenchWeekday, frenchMonth) where
 
 import Prelude
 
@@ -37,9 +37,24 @@ getDaysInRange bottom up  | bottom < up  = [bottom] <> getWeekdaysInRange (addDa
 
 frenchWeekday :: Date.Date -> String
 frenchWeekday date = case Date.weekday date of
-  Date.Monday -> "Lundi"
-  Date.Tuesday -> "Mardi"
-  Date.Wednesday -> "Mercredi"
-  Date.Thursday -> "Jeudi"
-  Date.Friday -> "Vendredi"
+  Date.Monday -> "Lun"
+  Date.Tuesday -> "Mar"
+  Date.Wednesday -> "Mer"
+  Date.Thursday -> "Jeu"
+  Date.Friday -> "Ven"
   _ -> "???"
+
+frenchMonth :: Date.Date -> String
+frenchMonth date = case Date.month date of
+  Date.January -> "Janv."
+  Date.February -> "Févr."
+  Date.March -> "Mars"
+  Date.April -> "Avr."
+  Date.May -> "Mai"
+  Date.June -> "Juin"
+  Date.July -> "Juil."
+  Date.August -> "Août"
+  Date.September -> "Sept."
+  Date.October -> "Oct."
+  Date.November -> "Nov."
+  Date.December -> "Déc."

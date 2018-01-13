@@ -1,4 +1,4 @@
-<h2>Préférences pour la période du <%= Date.to_iso8601(@month.start) %> au <%= Date.to_iso8601(@month.last) %></h2>
+<h2 class="title">Préférences pour la période du <%= Date.to_iso8601(@month.start) %> au <%= Date.to_iso8601(@month.last) %></h2>
 <ul>
   <%= for preference <- @month.preferences do %>
     <li>
@@ -14,25 +14,25 @@
     </li>
   <% end %>
   <li>
-  <%= link "ajouter mes préférences", to: page_path(@conn, :new_preference, @month.id) %>
+    <%= link "ajouter mes préférences", to: page_path(@conn, :new_preference, @month.id) %>
   </li>
 </ul>
 
-<h3>Meilleures dates pour le DDD</h3>
+<h3 class="title">Meilleures dates pour le DDD</h3>
 <ul>
   <%= for best <- @month.best_ddd do %>
     <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
   <% end %>
 </ul>
 
-<h3>Meilleures dates pour le Dojo du soir</h3>
+<h3 class="title">Meilleures dates pour le Dojo du soir</h3>
 <ul>
   <%= for best <- @month.best_evening_dojo do %>
     <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
   <% end %>
 </ul>
 
-<h3>Meilleures dates pour le Dojo du midi</h3>
+<h3 class="title">Meilleures dates pour le Dojo du midi</h3>
 <ul>
   <%= for best <- @month.best_lunch_dojo do %>
     <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>

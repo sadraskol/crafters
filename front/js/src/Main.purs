@@ -41,26 +41,39 @@ getInit = do
 
 render :: T.Render State StaticProps DomainEvent
 render dispatch props state _ =
-  [ R.table' [
-      R.tbody' [
-        R.tr' $ [R.td' []] <> (dateCell <$> range),
-        R.tr' $ renderLine Lunch range,
-        R.tr' $ renderLine Evening range
-      ]
+  [ R.div [RP.className "is-flex"]
+    [ R.aside' [
+        R.ul' [
+          R.li [RP.className "table-header"] [],
+          TimeSlotTitle.render Lunch range dispatch state,
+          TimeSlotTitle.render Evening range dispatch state
+        ]
+      ],
+      R.ul [RP.className "is-flex"] (renderRow <$> range)
     ],
     ActivityPicker.render dispatch state,
-    NameInput.render dispatch state,
-    R.p' [ R.button [RP.onClick \_ -> dispatch Submit] [R.text "Valider"] ]
+    R.div [RP.className "is-not-expanded"] [
+      NameInput.render dispatch state,
+      R.div [RP.className "field is-grouped is-grouped-right"] [
+        R.p [RP.className "control"] [
+          R.button [
+            RP.onClick \_ -> dispatch Submit,
+            RP.className "button is-primary"] [R.text "Valider"]
+        ]
+      ]
+    ]
   ]
 
   where
     range :: Array Date
     range = (unwrap props).range
-    renderLine :: TimeSlot -> Array Date -> Array ReactElement
-    renderLine timeslot range
-      = ([TimeSlotTitle.render timeslot range dispatch state]
-      <> ((SlotCell.render timeslot dispatch state) <$> range))
-    dateCell = DateTitle.render dispatch state
+
+    renderRow :: Date -> ReactElement
+    renderRow date = R.li [ RP.style {"min-width": 45, "max-width": 45} ] [
+      DateTitle.render dispatch state date,
+      SlotCell.render Lunch dispatch state date,
+      SlotCell.render Evening dispatch state date
+    ]
 
 performAction :: T.PerformAction _ State StaticProps DomainEvent
 performAction event props state = void $ T.cotransform $ applyEvent props event

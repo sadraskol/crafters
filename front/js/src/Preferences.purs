@@ -57,7 +57,7 @@ doRequest props state = unsafePerformEff do
       response <- post_ ("/api/preferences/" <> monthId) (encodeJson state)
       case response of
         {status: StatusCode 200} -> do
-          liftEff $ (assign $ "/month/" <> monthId) =<< (location =<< window)
+          liftEff $ (assign $ "/months/" <> monthId) =<< (location =<< window)
         _ -> do
           log "failure"
 
