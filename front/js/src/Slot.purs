@@ -1,16 +1,15 @@
-module Slot
-  ( TimeSlot(..)
-  , Slot(..)
-  ) where
+module Slot (TimeSlot(..), Slot(..), toggleSingle, toggleDate, toggleTimeSlot) where
 
 import Prelude
 
 import Data.Argonaut.Core (Json, fromString, jsonEmptyObject)
 import Data.Argonaut.Decode (class DecodeJson, decodeJson, getField)
 import Data.Argonaut.Encode (class EncodeJson, encodeJson, (:=), (~>))
+import Data.Array (insert, filter, foldr)
 import Data.Date (Date, canonicalDate, day, month, year)
 import Data.Either (Either(..))
 import Data.Enum (fromEnum, toEnum)
+import Data.Foldable (any)
 import Data.Generic (class Generic)
 import Data.Maybe (fromJust)
 import Partial.Unsafe (unsafePartial)
@@ -39,7 +38,6 @@ instance decodeSlot :: DecodeJson Slot where
     year <- getField date "year"
     timeslot <- getField obj "timeslot"
     pure $ Slot (getUnsafeDate year month day) timeslot
-
 
 instance encodeSlot :: EncodeJson Slot where
   encodeJson :: Slot -> Json
@@ -78,3 +76,21 @@ instance encodeTimeSlot :: EncodeJson TimeSlot where
 instance showTimeSlot :: Show TimeSlot where
   show Lunch = "Lunch"
   show Evening = "Evening"
+
+toggleSingle :: Slot -> Array Slot -> Array Slot
+toggleSingle slot slots
+  = if any (eq slot) slots
+    then filter (\s-> s /= slot) slots
+    else insert slot slots
+
+toggleDate :: Date -> Array Slot -> Array Slot
+toggleDate date slots
+  = if any (\(Slot d _) -> d == date) slots
+    then filter (\(Slot d _) -> d /= date) slots
+    else foldr insert slots ((Slot date) <$> [Lunch, Evening])
+
+toggleTimeSlot :: TimeSlot -> Array Date -> Array Slot -> Array Slot
+toggleTimeSlot timeslot range slots
+  = if any (\(Slot _ t) -> t == timeslot) slots
+    then filter (\(Slot _d t) -> t /= timeslot) slots
+    else foldr insert slots ((\d -> Slot d timeslot) <$> range)

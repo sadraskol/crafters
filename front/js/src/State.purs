@@ -1,4 +1,4 @@
-module State (State(..), initialState, changeSlots, changeName, addActivity, removeActivity) where
+module State (State(..), initialState, changeSlots, changeName, changeActivity) where
 
 import Prelude
 
@@ -6,8 +6,8 @@ import Activity (Activity)
 import Data.Argonaut.Core (Json, jsonEmptyObject)
 import Data.Argonaut.Decode (class DecodeJson, decodeJson, getField, getFieldOptional)
 import Data.Argonaut.Encode (class EncodeJson, encodeJson, (:=), (~>))
-import Data.Array (filter, (:))
 import Data.Either (Either)
+import Data.Enum (enumFromTo)
 import Data.Maybe (Maybe(..))
 import Data.Newtype (class Newtype, unwrap)
 import Slot (Slot)
@@ -20,6 +20,7 @@ newtype State =
 
 derive instance newtypeState :: Newtype State _
 derive instance eqState :: Eq State
+
 instance showState :: Show State where
   show :: State -> String
   show (State { slots: slots, name: name, activities: activities})
@@ -50,7 +51,7 @@ instance encodeState :: EncodeJson State where
       )
 
 initialState :: State
-initialState = State { slots : [], name : Nothing, activities: [] }
+initialState = State { slots : [], name : Nothing, activities: enumFromTo bottom top }
 
 changeSlots :: (Array Slot -> Array Slot) -> State -> State
 changeSlots changer state =
@@ -66,16 +67,9 @@ changeName name state
           , activities: (unwrap state).activities
           }
 
-addActivity :: Activity -> State -> State
-addActivity activity state =
-  State { slots: (unwrap state).slots
-        , name: (unwrap state).name
-        , activities: activity : (unwrap state).activities
-        }
-
-removeActivity :: Activity -> State -> State
-removeActivity activity state =
-  State { slots: (unwrap state).slots
-        , name: (unwrap state).name
-        , activities: filter ((/=) activity) (unwrap state).activities
-        }
+changeActivity :: (Array Activity -> Array Activity) -> State -> State
+changeActivity changer state
+  = State { slots: (unwrap state).slots
+          , name: (unwrap state).name
+          , activities: changer (unwrap state).activities
+          }
