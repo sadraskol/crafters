@@ -11,10 +11,10 @@ import Data.Maybe (fromJust)
 import Data.Newtype (class Newtype)
 import Partial.Unsafe (unsafePartial)
 
-newtype StaticProps =
-  StaticProps { id :: String
-        , range :: Array Date
-        }
+newtype StaticProps
+  = StaticProps { id :: String
+                , range :: Array Date
+                }
 
 derive instance newtypeStaticProps :: Newtype StaticProps _
 derive instance eqStaticProps :: Eq StaticProps

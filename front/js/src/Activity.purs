@@ -3,12 +3,11 @@ module Activity (Activity(..), toggleActivity) where
 import Data.Argonaut.Core (Json, fromString)
 import Data.Argonaut.Decode (class DecodeJson, decodeJson)
 import Data.Argonaut.Encode (class EncodeJson)
-import Data.Array (filter, insert)
 import Data.Either (Either(..))
 import Data.Enum (class Enum)
-import Data.Foldable (any)
 import Data.Maybe (Maybe(..))
-import Prelude (class Bounded, class Eq, class Ord, class Show, bind, pure, (/=), (<>), (==))
+import Data.Set (Set, delete, insert, member)
+import Prelude (class Bounded, class Eq, class Ord, class Show, bind, pure, (<>))
 
 data Activity
   = DDD
@@ -33,6 +32,7 @@ instance enumActivity :: Enum Activity where
   succ DDD = Just LunchDojo
   succ LunchDojo = Just EveningDojo
   succ EveningDojo = Nothing
+
   pred :: Activity -> Maybe Activity
   pred DDD = Nothing
   pred LunchDojo = Just DDD
@@ -54,8 +54,8 @@ instance encodeActivity :: EncodeJson Activity where
   encodeJson LunchDojo = fromString "lunch_dojo"
   encodeJson EveningDojo = fromString "evening_dojo"
 
-toggleActivity :: Activity -> Array Activity -> Array Activity
+toggleActivity :: Activity -> Set Activity -> Set Activity
 toggleActivity activity activities
-  = if any (\a -> a == activity) activities
-    then filter (\a -> a /= activity) activities
+  = if member activity activities
+    then delete activity activities
     else insert activity activities

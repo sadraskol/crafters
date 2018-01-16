@@ -10,12 +10,13 @@ import Data.Either (Either)
 import Data.Enum (enumFromTo)
 import Data.Maybe (Maybe(..))
 import Data.Newtype (class Newtype, unwrap)
+import Data.Set (Set, fromFoldable, toUnfoldable)
 import Slot (Slot)
 
 newtype State =
   State { slots :: Array Slot
         , name :: Maybe String
-        , activities :: Array Activity
+        , activities :: Set Activity
         }
 
 derive instance newtypeState :: Newtype State _
@@ -33,12 +34,16 @@ instance decodeState :: DecodeJson State where
   decodeJson json = do
     obj <- decodeJson json
     slots <- getField obj "slots"
-    activities <- getField obj "activities"
+    activities <- fromArray <$> getField obj "activities"
     name <- getFieldOptional obj "name"
     pure $ State { slots: slots
                  , name: name
                  , activities: activities
                  }
+
+      where
+        fromArray :: Array Activity -> Set Activity
+        fromArray activities = fromFoldable activities
 
 instance encodeState :: EncodeJson State where
   encodeJson :: State -> Json
@@ -46,12 +51,18 @@ instance encodeState :: EncodeJson State where
     = encodeJson
       ( "slots" := (unwrap state).slots
       ~> "name" := (unwrap state).name
-      ~> "activities" := (unwrap state).activities
+      ~> "activities" := activities
       ~> jsonEmptyObject
       )
+      where
+        activities :: Array Activity
+        activities = toUnfoldable (unwrap state).activities
 
 initialState :: State
-initialState = State { slots : [], name : Nothing, activities: enumFromTo bottom top }
+initialState = State { slots : [], name : Nothing, activities: fromFoldable allActivities }
+  where
+    allActivities :: Array Activity
+    allActivities = enumFromTo bottom top
 
 changeSlots :: (Array Slot -> Array Slot) -> State -> State
 changeSlots changer state =
@@ -67,7 +78,7 @@ changeName name state
           , activities: (unwrap state).activities
           }
 
-changeActivity :: (Array Activity -> Array Activity) -> State -> State
+changeActivity :: (Set Activity -> Set Activity) -> State -> State
 changeActivity changer state
   = State { slots: (unwrap state).slots
           , name: (unwrap state).name

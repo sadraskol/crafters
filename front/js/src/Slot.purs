@@ -5,7 +5,7 @@ import Prelude
 import Data.Argonaut.Core (Json, fromString, jsonEmptyObject)
 import Data.Argonaut.Decode (class DecodeJson, decodeJson, getField)
 import Data.Argonaut.Encode (class EncodeJson, encodeJson, (:=), (~>))
-import Data.Array (insert, filter, foldr)
+import Data.Array (delete, filter, foldr, insert)
 import Data.Date (Date, canonicalDate, day, month, year)
 import Data.Either (Either(..))
 import Data.Enum (fromEnum, toEnum)
@@ -80,7 +80,7 @@ instance showTimeSlot :: Show TimeSlot where
 toggleSingle :: Slot -> Array Slot -> Array Slot
 toggleSingle slot slots
   = if any (eq slot) slots
-    then filter (\s-> s /= slot) slots
+    then delete slot slots
     else insert slot slots
 
 toggleDate :: Date -> Array Slot -> Array Slot
