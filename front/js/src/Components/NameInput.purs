@@ -1,7 +1,7 @@
 module Components.NameInput where
 
 import Data.Newtype (unwrap)
-import Data.Set (isEmpty, member)
+import Data.Set (member)
 import Preferences (DomainEvent(..))
 import Prelude (($), (<>))
 import React (Event, ReactElement)

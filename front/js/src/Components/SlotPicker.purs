@@ -1,6 +1,5 @@
 module Components.SlotPicker where
 
-
 import Components.DateTitle as DateTitle
 import Components.SlotCell as SlotCell
 import Components.TimeSlotTitle as TimeSlotTitle

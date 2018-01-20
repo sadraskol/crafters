@@ -33,8 +33,11 @@ applyEvent _ (SingleToggle slot) state = validateSlots $ changeSlots (toggleSing
 applyEvent _ (DateToggle date) state = validateSlots $ changeSlots (toggleDate date) state
 applyEvent _ (TimeSlotToggle timeslot range) state = validateSlots $  changeSlots (toggleTimeSlot timeslot range) state
 applyEvent _ (ActivityToggle activity) state = validateActivities $ changeActivity (toggleActivity activity) state
-applyEvent props Submit state = doRequest props state
+applyEvent props Submit state = doRequest props $ validate state
 applyEvent _ (Name name) state = validateName $ changeName name state
+
+validate :: State -> State
+validate = validateActivities <<< validateName <<< validateSlots
 
 doRequest :: StaticProps -> State -> State
 doRequest props state
