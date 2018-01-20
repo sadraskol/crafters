@@ -11,6 +11,7 @@ defmodule Crafters.Survey.Month do
     field :last, :date
     field :current, :boolean
     field :range, :any, virtual: true
+    field :date_range, :any, virtual: true
     field :best_ddd, :any, virtual: true
     field :best_evening_dojo, :any, virtual: true
     field :best_lunch_dojo, :any, virtual: true
@@ -57,5 +58,12 @@ defmodule Crafters.Survey.Month do
     |> Enum.to_list()
 
     Map.put(month, :range, range)
+  end
+
+  def set_date_range(%Month{} = month) do
+    range = Date.range(month.start, month.last)
+    |> Enum.filter(fn (date) -> !Enum.member?([6, 7], Date.day_of_week(date)) end)
+
+    Map.put(month, :date_range, range)
   end
 end

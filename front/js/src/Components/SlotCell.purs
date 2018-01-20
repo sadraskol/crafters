@@ -14,7 +14,7 @@ import Slot (Slot(..), TimeSlot)
 
 render :: TimeSlot -> _ -> State -> Date -> ReactElement
 render timeslot dispatch state date =
-  R.li [ RP.className "table-cell" ]
+  R.div [ RP.className "table-cell" ]
     [ R.label [ labelStyle ]
       [ R.input [ RP._type "checkbox"
                 , inputStyle

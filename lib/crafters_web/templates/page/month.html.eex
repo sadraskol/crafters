@@ -1,22 +1,25 @@
 <h2 class="title">Préférences pour la période du <%= Date.to_iso8601(@month.start) %> au <%= Date.to_iso8601(@month.last) %></h2>
-<ul>
-  <%= for preference <- @month.preferences do %>
-    <li>
-      <%= preference.name %>
-      -
-      <%= for activity <- preference.activities do %>
-        <%= activity.name %>;
-      <% end %>
-      -
-      <%= for slot <- preference.slots do %>
-        <%= Date.to_iso8601(slot.date) %> - <%= slot.timeslot %>;
-      <% end %>
-    </li>
-  <% end %>
-  <li>
-    <%= link "ajouter mes préférences", to: page_path(@conn, :new_preference, @month.id) %>
-  </li>
-</ul>
+<div class="is-flex">
+  <aside>
+    <ul><li class="table-header"></li><li class="timeslot-cell">Midi</li><li class="timeslot-cell">Soirée</li></ul>
+  </aside>
+  <ul class="is-flex">
+    <%= for date <- @month.date_range do %>
+      <li style="min-width:45px;max-width:45px;">
+        <div class="table-header has-text-centered">
+          <div><%= day_of_week(date) %></div>
+          <div class="has-text-weight-bold"><%= date.day %></div>
+          <div><%= month_of_year(date) %></div>
+        </div>
+        <div class="table-cell"><label><%= count_votes(@month, date, "lunch") %></label></div>
+        <div class="table-cell"><label><%= count_votes(@month, date, "evening") %></label></div>
+      </li>
+    <% end %>
+  </ul>
+</div>
+<p style="margin-top:1em;margin-bottom:1em;">
+  <%= link "Ajouter mes préférences", class: "button", to: page_path(@conn, :new_preference, @month.id) %>
+</p>
 
 <h3 class="title">Meilleures dates pour le DDD</h3>
 <ul>

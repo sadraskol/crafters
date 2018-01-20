@@ -11,7 +11,7 @@ import React.DOM.Props as RP
 import Slot (TimeSlot(..))
 
 render :: TimeSlot -> Array Date -> _ -> State -> ReactElement
-render timeslot range dispatch _ = R.li [ RP.onClick \_ -> dispatch $ TimeSlotToggle timeslot range
+render timeslot range dispatch _ = R.div [ RP.onClick \_ -> dispatch $ TimeSlotToggle timeslot range
                        , RP.className "timeslot-cell"
                        ] [R.text $ frenchTimeslot timeslot]
   where

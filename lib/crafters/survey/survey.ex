@@ -12,6 +12,7 @@ defmodule Crafters.Survey do
     |> Repo.preload(preferences: [:slots, :activities])
     |> Month.list_best_dates()
     |> Month.set_range()
+    |> Month.set_date_range()
   end
 
   def put_month(attrs \\ %{}) do
@@ -42,6 +43,7 @@ defmodule Crafters.Survey do
     |> Repo.preload(preferences: [:slots, :activities])
     |> Month.list_best_dates()
     |> Month.set_range()
+    |> Month.set_date_range()
   end
 
   def set_current_month(id) do
