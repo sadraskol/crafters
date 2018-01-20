@@ -1,7 +1,7 @@
 <ul>
   <%= for month <- @months do %>
     <li>
-      <%= link "month " <> Date.to_iso8601(month.start), to: page_path(@conn, :month, month.id) %>
+      <%= link "mois " <> Date.to_iso8601(month.start) <> " au " <> Date.to_iso8601(month.last), to: page_path(@conn, :month, month.id) %>
       -
       <%= link "définir comme défaut", to: page_path(@conn, :set_current_month, month.id) %>
       -

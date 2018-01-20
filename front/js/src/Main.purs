@@ -2,42 +2,27 @@ module Main where
 
 import Components.ActivityPicker as ActivityPicker
 import Components.DateTitle as DateTitle
+import Components.NameInput as NameInput
 import Components.SlotCell as SlotCell
 import Components.TimeSlotTitle as TimeSlotTitle
-import Components.NameInput as NameInput
-import Control.Monad.Eff.Console (log)
 import Control.Monad.Eff (Eff)
-import DOM.HTML (window)
-import DOM.HTML.Types (htmlDocumentToNonElementParentNode)
-import DOM.HTML.Window (document)
-import DOM.Node.Node (textContent)
-import DOM.Node.NonElementParentNode (getElementById)
-import DOM.Node.Types (ElementId(..), elementToNode)
+import Control.Monad.Eff.Console (log)
 import Data.Argonaut.Decode (decodeJson)
 import Data.Argonaut.Parser (jsonParser)
 import Data.Date (Date)
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(Just, Nothing))
 import Data.Newtype (unwrap)
+import Data.Set (member)
 import Preferences (DomainEvent(..), applyEvent)
-import Prelude (Unit, bind, discard, pure, void, ($), (<$>), (<<<), (<>), (=<<))
+import Prelude (Unit, bind, discard, void, ($), (<$>), (<>), (=<<))
 import React (ReactElement)
 import React.DOM as R
 import React.DOM.Props as RP
 import Slot (TimeSlot(..))
-import State (State, initialState)
-import StaticProps (StaticProps(..))
+import State (Error(..), State, initialState)
+import StaticProps (StaticProps(..), getInitProps)
 import Thermite as T
 import ThermiteUtils (defaultMain)
-
-getInit :: Eff _ String
-getInit = do
-  win <- window
-  doc <- document win
-  maybeEl <- getElementById (ElementId "init-props") (htmlDocumentToNonElementParentNode doc)
-  case maybeEl of
-    Nothing -> pure ""
-    Just el -> textContent <<< elementToNode $ el
 
 render :: T.Render State StaticProps DomainEvent
 render dispatch props state _ =
@@ -51,6 +36,7 @@ render dispatch props state _ =
       ],
       R.ul [RP.className "is-flex"] (renderRow <$> range)
     ],
+    errorMessage,
     ActivityPicker.render dispatch state,
     R.div [RP.className "is-not-expanded"] [
       NameInput.render dispatch state,
@@ -75,6 +61,15 @@ render dispatch props state _ =
       SlotCell.render Evening dispatch state date
     ]
 
+    fieldHasError :: Boolean
+    fieldHasError = member NoSlot (unwrap state).errors
+    errorMessage :: ReactElement
+    errorMessage = if fieldHasError
+                   then R.div [RP.className "field"]
+                     [R.p [RP.className "help is-danger"] [R.text "Choisissez au moins un créneau"]]
+                   else R.p' []
+
+
 performAction :: T.PerformAction _ State StaticProps DomainEvent
 performAction event props state = void $ T.cotransform $ applyEvent props event
 
@@ -83,7 +78,7 @@ spec = T.simpleSpec performAction render
 
 main :: forall e. Eff _ Unit
 main = do
-  str <- getInit
+  str <- getInitProps
   case decodeJson =<< jsonParser str of
     Right props -> defaultMain spec initialState props
     Left message -> do
