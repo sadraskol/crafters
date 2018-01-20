@@ -11,8 +11,16 @@
           <div class="has-text-weight-bold"><%= date.day %></div>
           <div><%= month_of_year(date) %></div>
         </div>
-        <div class="table-cell"><label><%= count_votes(@month, date, "lunch") %></label></div>
-        <div class="table-cell"><label><%= count_votes(@month, date, "evening") %></label></div>
+        <div class="table-cell">
+          <label class="has-text-centered">
+            <%= count_votes(@month, date, "lunch") %>
+          </label>
+        </div>
+        <div class="table-cell">
+          <label class="has-text-centered">
+            <%= count_votes(@month, date, "evening") %>
+          </label>
+        </div>
       </li>
     <% end %>
   </ul>
