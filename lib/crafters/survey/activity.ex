@@ -13,7 +13,7 @@ defmodule Crafters.Survey.Activity do
     timestamps()
   end
 
-  def changeset(%Activity{} = activity, %{"name" => name} = params) do
+  def changeset(%Activity{} = activity, %{"name" => _name} = params) do
     activity
     |> cast(params, [:name])
     |> validate_inclusion(:name, ["ddd", "evening_dojo", "lunch_dojo"])
