@@ -14,8 +14,8 @@ import Slot (Slot(..), TimeSlot)
 
 render :: TimeSlot -> _ -> State -> Date -> ReactElement
 render timeslot dispatch state date =
-  R.li [ liStyle ]
-    [ R.label [ RP.className "table-timeslot ", labelStyle ]
+  R.li [ RP.className "table-cell" ]
+    [ R.label [ labelStyle ]
       [ R.input [ RP._type "checkbox"
                 , inputStyle
                 , RP.checked isChecked
@@ -25,13 +25,8 @@ render timeslot dispatch state date =
     ]
   where
     isChecked = any (eq $ Slot date timeslot) (unwrap state).slots
-    liStyle = RP.style { "text-align": "center"
-                       , "padding": 1
-                       , "min-width": 40
-                       , "min-height": 40
-                       }
 
-    labelStyle = RP.style { "background-color": if isChecked then "green" else "red"
+    labelStyle = RP.style { "background-color": if isChecked then "hsl(171, 100%, 41%)" else "#080408"
                           , cursor: "pointer" }
 
     inputStyle = RP.style { "visibility" : "hidden" }

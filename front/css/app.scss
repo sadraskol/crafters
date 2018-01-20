@@ -1,7 +1,46 @@
+@import "../node_modules/bulma/sass/utilities/initial-variables";
+@import "../node_modules/bulma/sass/utilities/functions";
+
+$black: #291629;
+$black-invert: #fff;
+$family-serif: "Merriweather", "Georgia", serif;
+
+$primary: $black;
+$primary-invert: $black-invert;
+$family-primary: $family-serif;
+
 @import "../node_modules/bulma/bulma";
 
 .table-header {
   height: 85px;
+  border-bottom: 1px solid $grey-light;
+}
+
+.table-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 6px 8px 6px;
+  margin: 0px;
+
+  & label {
+    height: 25px;
+    width: 26px;
+  }
+
+  border-bottom: 1px solid $grey-light;
+}
+
+.timeslot-cell {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3px 0 3px 3px;
+  padding: 3px;
+  height: 40px;
+
+  border-bottom: 1px solid $grey-light;
 }
 
 .is-not-expanded {

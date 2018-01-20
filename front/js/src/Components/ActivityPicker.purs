@@ -15,9 +15,9 @@ render :: _ -> State -> ReactElement
 render dispatch state = R.div [RP.className "field"] $ [
   R.div [RP.className "control"] [
     R.ul [ ulStyle ] $ [
-        R.li' [ R.label' [ (R.input [ RP._type "checkbox" , RP.checked $ isChecked DDD, RP.onClick \_ -> dispatch $ ActivityToggle $ DDD] []), R.text " DDD" ]]
-      , R.li' [ R.label' [ (R.input [ RP._type "checkbox" , RP.checked $ isChecked EveningDojo, RP.onClick \_ -> dispatch $ ActivityToggle $ EveningDojo] []), R.text " Coding dojo du soir" ]]
-      , R.li' [ R.label' [ (R.input [ RP._type "checkbox" , RP.checked $ isChecked LunchDojo, RP.onClick \_ -> dispatch $ ActivityToggle $ LunchDojo] []), R.text " Coding dojo du midi" ]]
+        R.li' [ R.label [RP.style { cursor: "pointer" }] [ (R.input [ RP._type "checkbox", RP.checked $ isChecked DDD, RP.onClick \_ -> dispatch $ ActivityToggle $ DDD] []), R.text " DDD" ]]
+      , R.li' [ R.label [RP.style { cursor: "pointer" }] [ (R.input [ RP._type "checkbox", RP.checked $ isChecked EveningDojo, RP.onClick \_ -> dispatch $ ActivityToggle $ EveningDojo] []), R.text " Coding dojo du soir" ]]
+      , R.li' [ R.label [RP.style { cursor: "pointer" }] [ (R.input [ RP._type "checkbox", RP.checked $ isChecked LunchDojo, RP.onClick \_ -> dispatch $ ActivityToggle $ LunchDojo] []), R.text " Coding dojo du midi" ]]
       ]
     ]
   ] <> errorMessage

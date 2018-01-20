@@ -25,12 +25,12 @@ module.exports = {
     'app': ['./js/src/App.js', './css/app.scss'],
   },
   output: {
-    path: process.env.NODE_ENV == 'production' ? `${__dirname}/../priv/static` : `${__dirname}/dist`,
+    path: `${__dirname}/../priv/static`,
     pathinfo: true,
     filename: 'js/[name].js'
   },
 
-  devtool: 'eval',
+  devtool: 'source-map',
 
   resolve: {
     modules: [
@@ -39,12 +39,6 @@ module.exports = {
       'node_modules'
     ],
     extensions: [ '.purs', '.js' ]
-  },
-
-  devServer: {
-    contentBase: './dist',
-    port: 4008,
-    stats: 'errors-only'
   },
 
   module: {
@@ -83,6 +77,7 @@ module.exports = {
       }
     }),
     new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true }),
-    new webpack.optimize.ModuleConcatenationPlugin()
-   ]
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.optimize.UglifyJsPlugin({ output: { comments: false } })
+  ]
 };

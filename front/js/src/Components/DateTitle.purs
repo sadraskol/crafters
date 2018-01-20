@@ -15,10 +15,7 @@ import React.DOM.Props as RP
 render :: _ -> State -> Date -> ReactElement
 render dispatch _ date =
   R.li [ RP.onClick \_ -> dispatch $ DateToggle date
-       , RP.style { cursor: "pointer"
-                  , padding: "3px"
-                  , "margin-right": "2px"
-                  }
+       , RP.style { cursor: "pointer" }
        , RP.className "table-header has-text-centered"
        ] $ dateToElement date
 

@@ -12,7 +12,7 @@ import Slot (TimeSlot(..))
 
 render :: TimeSlot -> Array Date -> _ -> State -> ReactElement
 render timeslot range dispatch _ = R.li [ RP.onClick \_ -> dispatch $ TimeSlotToggle timeslot range
-                       , cellStyle
+                       , RP.className "timeslot-cell"
                        ] [R.text $ frenchTimeslot timeslot]
   where
     frenchTimeslot Lunch = "Midi"
