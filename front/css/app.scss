@@ -16,6 +16,12 @@ $family-primary: $family-serif;
   border-bottom: 1px solid $grey-light;
 }
 
+.is-best {
+  background-color: $turquoise;
+  align-items: center;
+  justify-content: center;
+}
+
 .table-cell {
   display: flex;
   align-items: center;

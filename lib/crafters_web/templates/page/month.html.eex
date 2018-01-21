@@ -1,7 +1,12 @@
-<h2 class="title">Préférences pour la période du <%= Date.to_iso8601(@month.start) %> au <%= Date.to_iso8601(@month.last) %></h2>
+<h2 class="title">Récapitulatif pour la période du <%= Date.to_iso8601(@month.start) %> au <%= Date.to_iso8601(@month.last) %></h2>
 <div class="is-flex">
   <aside>
-    <ul><li class="table-header"></li><li class="timeslot-cell">Midi</li><li class="timeslot-cell">Soirée</li></ul>
+    <ul>
+      <li class="table-header"></li>
+      <li class="timeslot-cell">DDD</li>
+      <li class="timeslot-cell">Dojo Soir</li>
+      <li class="timeslot-cell">Dojo Midi</li>
+    </ul>
   </aside>
   <ul class="is-flex">
     <%= for date <- @month.date_range do %>
@@ -12,13 +17,18 @@
           <div><%= month_of_year(date) %></div>
         </div>
         <div class="table-cell">
-          <label class="has-text-centered">
-            <%= count_votes(@month, date, "lunch") %>
+          <label class="has-text-centered<%= if included?(date, @month.best_ddd) do %> is-best<% end %>">
+            <%= count_votes(@month, "ddd", date, "evening") %>
           </label>
         </div>
         <div class="table-cell">
-          <label class="has-text-centered">
-            <%= count_votes(@month, date, "evening") %>
+          <label class="has-text-centered<%= if included?(date, @month.best_evening_dojo) do %> is-best<% end %>">
+            <%= count_votes(@month, "evening_dojo", date, "evening") %>
+          </label>
+        </div>
+        <div class="table-cell">
+          <label class="has-text-centered<%= if included?(date, @month.best_lunch_dojo) do %> is-best<% end %>">
+            <%= count_votes(@month, "lunch_dojo", date, "lunch") %>
           </label>
         </div>
       </li>
@@ -28,24 +38,3 @@
 <p style="margin-top:1em;margin-bottom:1em;">
   <%= link "Ajouter mes préférences", class: "button", to: page_path(@conn, :new_preference, @month.id) %>
 </p>
-
-<h3 class="title">Meilleures dates pour le DDD</h3>
-<ul>
-  <%= for best <- @month.best_ddd do %>
-    <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
-  <% end %>
-</ul>
-
-<h3 class="title">Meilleures dates pour le Dojo du soir</h3>
-<ul>
-  <%= for best <- @month.best_evening_dojo do %>
-    <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
-  <% end %>
-</ul>
-
-<h3 class="title">Meilleures dates pour le Dojo du midi</h3>
-<ul>
-  <%= for best <- @month.best_lunch_dojo do %>
-    <li><%= Date.to_iso8601(elem(best, 0)) %> &rarr; <%= elem(best, 1) %></li>
-  <% end %>
-</ul>

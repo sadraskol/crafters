@@ -1,16 +1,22 @@
 defmodule CraftersWeb.PageView do
   use CraftersWeb, :view
 
-  def count_votes(month, date, timeslot) do
+  def count_votes(month, activity, date, timeslot) do
     month.preferences
-    |> Enum.filter(has_slot(date, timeslot))
+    |> Enum.filter(has_slot(activity, date, timeslot))
     |> Enum.count()
   end
 
-  defp has_slot(date, timeslot) do
+  defp has_slot(activity, date, timeslot) do
     fn(preference) ->
-      Enum.any?(preference.slots, fn(slot) -> slot.date == date && slot.timeslot == timeslot end)
+      has_activity = Enum.any?(preference.activities, fn(act) -> act.name == activity end)
+      has_timeslot = Enum.any?(preference.slots, fn(slot) -> slot.date == date && slot.timeslot == timeslot end)
+      has_activity && has_timeslot
     end
+  end
+
+  def included?(date, best_dates) do
+    Enum.any?(best_dates, fn(el) -> elem(el, 0) == date end)
   end
 
   def day_of_week(date) do
