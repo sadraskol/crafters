@@ -2,8 +2,11 @@
   <%= for month <- @months do %>
     <li>
       <%= link "mois " <> Date.to_iso8601(month.start) <> " au " <> Date.to_iso8601(month.last), to: page_path(@conn, :month, month.id) %>
-      -
-      <%= link "définir comme défaut", to: page_path(@conn, :set_current_month, month.id) %>
+      <%= if month.current do %> (current) <% end %>
+      <%= if !month.current do %>
+        -
+        <%= link "définir comme défaut", to: page_path(@conn, :set_current_month, month.id) %>
+      <% end %>
       -
       <%= link "effacer", to: page_path(@conn, :delete_month, month.id) %>
     </li>

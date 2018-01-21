@@ -20,10 +20,6 @@ defmodule CraftersWeb.Router do
   scope "/", CraftersWeb do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :current_month
-    get "/months/:id", PageController, :month
-    get "/months/:id/new_preference", PageController, :new_preference
-
     scope "/months" do
       pipe_through :auth
 
@@ -33,6 +29,10 @@ defmodule CraftersWeb.Router do
       get "/:id/delete_month", PageController, :delete_month
       get "/:id/current_month", PageController, :set_current_month
     end
+
+    get "/", PageController, :current_month
+    get "/months/:id", PageController, :month
+    get "/months/:id/new_preference", PageController, :new_preference
   end
 
   scope "/api", CraftersWeb.Api do
