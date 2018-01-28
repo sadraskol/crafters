@@ -8,7 +8,7 @@
 - [x] No empty activities
 - [x] Access of the month admin under some protection
 - [ ] Mitigate multiple form submit
-- [ ] Mitigate spam on the form
+- [x] Mitigate spam on the form
 
 ## Futuristic tasks
 

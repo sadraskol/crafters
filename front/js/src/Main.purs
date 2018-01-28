@@ -49,4 +49,5 @@ main = do
     Right props -> defaultMain spec initialState props
     Left message -> do
       log ("error: " <> message)
-      defaultMain spec initialState (StaticProps {id: "", range: []})
+      -- TODO display an error message instead
+      defaultMain spec initialState (StaticProps {id: "", range: [], csrf_token: ""})

@@ -10,7 +10,8 @@ import Control.Monad.Eff.Unsafe (unsafePerformEff)
 import DOM.HTML (window)
 import DOM.HTML.Location (assign)
 import DOM.HTML.Window (location)
-import Data.Argonaut.Encode (encodeJson)
+import Data.Argonaut.Core (Json)
+import Data.Argonaut.Encode (encodeJson, (:=), (~>))
 import Data.Date (Date)
 import Data.Newtype (unwrap)
 import Data.Set (isEmpty)
@@ -43,7 +44,7 @@ doRequest props state
     then
       unsafePerformEff do
         launchAff_ do
-            response <- post_ ("/api/preferences/" <> monthId) (encodeJson state)
+            response <- post_ ("/api/preferences/" <> monthId) (addCsrf (encodeJson state) (unwrap props).csrf_token)
             case response of
               {status: StatusCode 200} -> do
                 liftEff $ (assign $ "/months/" <> monthId) =<< (location =<< window)
@@ -56,3 +57,6 @@ doRequest props state
       where
       monthId :: String
       monthId = (unwrap props).id
+
+addCsrf :: Json -> String -> Json
+addCsrf json token = "_csrf_token" := token ~> json

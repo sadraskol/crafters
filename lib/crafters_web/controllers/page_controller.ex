@@ -36,8 +36,16 @@ defmodule CraftersWeb.PageController do
   end
 
   def new_preference(conn, %{"id" => month_id}) do
-    month = Crafters.Survey.get_month!(month_id)
+    init = Crafters.Survey.get_month!(month_id)
+            |> month_to_init()
+            |> Map.put("csrf_token", get_csrf_token())
             |> Poison.encode!()
-    render conn, "preference.html", init: month
+    render conn, "preference.html", init: init
+  end
+
+  def month_to_init(month) do
+    %{}
+    |> Map.put("range", month.range)
+    |> Map.put("id", month.id)
   end
 end

@@ -21,13 +21,15 @@ import Partial.Unsafe (unsafePartial)
 newtype StaticProps
   = StaticProps { id :: String
                 , range :: Array Date
+                , csrf_token :: String
                 }
 
 derive instance newtypeStaticProps :: Newtype StaticProps _
 derive instance eqStaticProps :: Eq StaticProps
 instance showStaticProps :: Show StaticProps where
   show :: StaticProps -> String
-  show (StaticProps { id: id, range: range}) = "StaticProps { id: " <> show id <> ", range: " <> show range <> " }"
+  show (StaticProps {id: id, range: range,csrf_token: csrf_token})
+    = "StaticProps { id: " <> id <> ", range: " <> show range <> ", csrf_token: " <> csrf_token <> " }"
 
 
 getUnsafeDate :: Int -> Int -> Int -> Date
@@ -47,8 +49,10 @@ instance decodeStaticProps :: DecodeJson StaticProps where
     obj <- decodeJson json
     id <- getField obj "id"
     range <- getField obj "range"
+    csrf_token <- getField obj "csrf_token"
     pure $ StaticProps { range: decodeDate <$> range
                  , id: id
+                 , csrf_token: csrf_token
                  }
 
 getInitProps :: Eff _ String

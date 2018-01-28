@@ -11,6 +11,8 @@ defmodule CraftersWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :protect_from_forgery
   end
 
   pipeline :auth do
