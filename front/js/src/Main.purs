@@ -1,7 +1,6 @@
 module Main where
 
 import Components.ActivityPicker as ActivityPicker
-import Components.NameInput as NameInput
 import Components.SlotPicker as SlotPicker
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (log)
@@ -19,15 +18,19 @@ import ThermiteUtils (defaultMain)
 
 render :: T.Render State StaticProps DomainEvent
 render dispatch props state _ =
-  [ SlotPicker.render dispatch props state
+  [ R.p [RP.className "content"]
+    [ R.text "Choisissez les créneaux où vous êtes disponible et les activités auxquelles vous voulez participer. Nous nous occuperons de trouver le meilleur créneau possible."
+    , R.br' []
+    , R.text "Ce sondage ne vous engage pas à participer aux sessions."
+    ]
+  , SlotPicker.render dispatch props state
   , ActivityPicker.render dispatch state
   , R.div [RP.className "is-not-expanded"] [
-      NameInput.render dispatch state,
-      R.div [RP.className "field is-grouped is-grouped-right"] [
+      R.div [RP.className "field"] [
         R.p [RP.className "control"] [
           R.button [
             RP.onClick \_ -> dispatch Submit,
-            RP.className "button is-primary"] [R.text "Valider"]
+            RP.className "button is-primary"] [R.text "Soumettre mes préférences"]
         ]
       ]
     ]

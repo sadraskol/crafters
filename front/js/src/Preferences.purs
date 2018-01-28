@@ -17,7 +17,7 @@ import Data.Set (isEmpty)
 import Network.HTTP.Affjax (post_)
 import Network.HTTP.StatusCode (StatusCode(..))
 import Slot (Slot, TimeSlot, toggleDate, toggleSingle, toggleTimeSlot)
-import State (State, changeName, changeSlots, changeActivity, validateName, validateSlots, validateActivities)
+import State (State, changeSlots, changeActivity, validateSlots, validateActivities)
 import StaticProps (StaticProps)
 
 data DomainEvent
@@ -25,7 +25,6 @@ data DomainEvent
   | DateToggle Date
   | TimeSlotToggle TimeSlot (Array Date)
   | ActivityToggle Activity
-  | Name String
   | Submit
 
 applyEvent :: StaticProps -> DomainEvent -> State -> State
@@ -34,10 +33,9 @@ applyEvent _ (DateToggle date) state = validateSlots $ changeSlots (toggleDate d
 applyEvent _ (TimeSlotToggle timeslot range) state = validateSlots $  changeSlots (toggleTimeSlot timeslot range) state
 applyEvent _ (ActivityToggle activity) state = validateActivities $ changeActivity (toggleActivity activity) state
 applyEvent props Submit state = doRequest props $ validate state
-applyEvent _ (Name name) state = validateName $ changeName name state
 
 validate :: State -> State
-validate = validateActivities <<< validateName <<< validateSlots
+validate = validateActivities <<< validateSlots
 
 doRequest :: StaticProps -> State -> State
 doRequest props state

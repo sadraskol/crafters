@@ -35,7 +35,7 @@ render dispatch props state = R.div [RP.className "field"] [
     range = (unwrap props).range
 
     renderRow :: Date -> ReactElement
-    renderRow date = R.li [ RP.style {"min-width": 45, "max-width": 45} ] [
+    renderRow date = R.li [ RP.style {minWidth: 45, maxWidth: 45} ] [
       DateTitle.render dispatch state date,
       SlotCell.render Lunch dispatch state date,
       SlotCell.render Evening dispatch state date

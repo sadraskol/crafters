@@ -1,4 +1,4 @@
-module State (State(..), Error(..), initialState, changeSlots, changeName, changeActivity, validateName, validateSlots, validateActivities) where
+module State (State(..), Error(..), initialState, changeSlots, changeActivity, validateSlots, validateActivities) where
 
 import Prelude
 
@@ -10,25 +10,21 @@ import Data.Either (Either)
 import Data.Enum (enumFromTo)
 import Data.Newtype (class Newtype, unwrap)
 import Data.Set (Set, delete, empty, fromFoldable, insert, isEmpty, toUnfoldable)
-import Data.String (null, trim)
 import Slot (Slot)
 
 data Error
-  = EmptyName
-  | NoActivity
+  = NoActivity
   | NoSlot
 
 derive instance eqError :: Eq Error
 derive instance ordError :: Ord Error
 instance showError :: Show Error where
   show :: Error -> String
-  show EmptyName = "Pas de nom"
   show NoActivity = "Pas d'activité"
   show NoSlot = "Pas de créneau"
 
 newtype State =
   State { slots :: Array Slot
-        , name :: String
         , activities :: Set Activity
         , errors :: Set Error
         }
@@ -38,9 +34,8 @@ derive instance eqState :: Eq State
 
 instance showState :: Show State where
   show :: State -> String
-  show (State { slots: slots, name: name, activities: activities, errors: errors})
+  show (State { slots: slots, activities: activities, errors: errors})
     = "State { slots: " <> show slots <>
-      ", name: " <> show name <>
       ", activities: " <> show activities <>
       ", errors: " <> show errors <> " }"
 
@@ -50,9 +45,7 @@ instance decodeState :: DecodeJson State where
     obj <- decodeJson json
     slots <- getField obj "slots"
     activities <- fromArray <$> getField obj "activities"
-    name <- getField obj "name"
     pure $ State { slots: slots
-                 , name: name
                  , activities: activities
                  , errors: empty
                  }
@@ -66,7 +59,6 @@ instance encodeState :: EncodeJson State where
   encodeJson state
     = encodeJson
       ( "slots" := (unwrap state).slots
-      ~> "name" := (unwrap state).name
       ~> "activities" := activities
       ~> jsonEmptyObject
       )
@@ -75,7 +67,7 @@ instance encodeState :: EncodeJson State where
         activities = toUnfoldable (unwrap state).activities
 
 initialState :: State
-initialState = State { slots: [], name: "", activities: fromFoldable allActivities, errors: empty }
+initialState = State { slots: [], activities: fromFoldable allActivities, errors: empty }
   where
     allActivities :: Array Activity
     allActivities = enumFromTo bottom top
@@ -83,23 +75,13 @@ initialState = State { slots: [], name: "", activities: fromFoldable allActiviti
 changeSlots :: (Array Slot -> Array Slot) -> State -> State
 changeSlots changer state =
   State { slots: changer (unwrap state).slots
-        , name: (unwrap state).name
         , activities: (unwrap state).activities
         , errors: (unwrap state).errors
         }
 
-changeName :: String -> State -> State
-changeName name state
-  = State { slots: (unwrap state).slots
-          , name: name
-          , activities: (unwrap state).activities
-          , errors: (unwrap state).errors
-          }
-
 changeActivity :: (Set Activity -> Set Activity) -> State -> State
 changeActivity changer state
   = State { slots: (unwrap state).slots
-          , name: (unwrap state).name
           , activities: changer (unwrap state).activities
           , errors: (unwrap state).errors
           }
@@ -107,7 +89,6 @@ changeActivity changer state
 changeErrors :: (Set Error -> Set Error) -> State -> State
 changeErrors changer state
   = State { slots: (unwrap state).slots
-          , name: (unwrap state).name
           , activities: (unwrap state).activities
           , errors: changer (unwrap state).errors
           }
@@ -123,9 +104,3 @@ validateActivities state
   = if isEmpty (unwrap state).activities
     then changeErrors (insert NoActivity) state
     else changeErrors (delete NoActivity) state
-
-validateName :: State -> State
-validateName state
-  = if null $ trim (unwrap state).name
-    then changeErrors (insert EmptyName) state
-    else changeErrors (delete EmptyName) state
