@@ -41,7 +41,8 @@ defmodule Crafters.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:plug_basic_auth, "~> 1.1"}
+      {:plug_basic_auth, "~> 1.1"},
+      {:distillery, "~> 1.5", runtime: false}
     ]
   end
 
