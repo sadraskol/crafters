@@ -38,7 +38,8 @@ environment :prod do
   set include_src: false
   set cookie: :"BqwC]?j0v0O&gFC><)rz{|l2|r@Gi^*a;OlJR)jc!LN%Fl:Tf8g]c8=.[t$TWjBI"
   set commands: [
-    "migrate": "rel/commands/migrate.sh"
+    "migrate": "rel/commands/migrate.sh",
+    "run": "rel/commands/run.sh" 
   ]
 end
 

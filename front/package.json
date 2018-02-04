@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "webpack": "webpack --progress",
+    "webpack": "webpack -p --progress",
     "webpack:watch": "webpack --progress --watch",
     "webpack-dev-server": "webpack-dev-server --progress --inline --hot",
     "test": "pulp test --src-path js/src --test-path js/test",
