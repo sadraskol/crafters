@@ -19,6 +19,14 @@ defmodule CraftersWeb.PageView do
     Enum.any?(best_dates, fn(el) -> elem(el, 0) == date end)
   end
 
+  def format_date_inline(date) do
+    [ content_tag(:span, day_of_week(date)),
+      " ",
+      content_tag(:span, date.day),
+      " ",
+      content_tag(:span, month_of_year(date))]
+  end
+
   def day_of_week(date) do
     case Date.day_of_week(date) do
       1 -> "Lun"
@@ -26,6 +34,8 @@ defmodule CraftersWeb.PageView do
       3 -> "Mer"
       4 -> "Jeu"
       5 -> "Ven"
+      6 -> "Sam"
+      7 -> "Dim"
     end
   end
 

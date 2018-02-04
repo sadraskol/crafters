@@ -1,4 +1,8 @@
-<h2 class="title">Récapitulatif pour la période du <%= Date.to_iso8601(@month.start) %> au <%= Date.to_iso8601(@month.last) %></h2>
+<h2 class="title">Récapitulatif pour la période du <%= format_date_inline(@month.start) %> au <%= format_date_inline(@month.last) %></h2>
+<p class="content">
+  Bienvenue sur le sondage pour les prochains événements du groupe Lyon Software Crafters.<br/>
+  Vous pouvez voir le résumé des résultat ici ou renseigner vos propres disponibilités (cela n'engage à rien) !
+</p>
 <div class="is-flex">
   <aside>
     <ul>
