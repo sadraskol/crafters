@@ -33,5 +33,5 @@ function put_s3() {
     "https://$bucket.s3.amazonaws.com$aws_path$file"
 }
 
-$release = "_build/hello/hello.tar.gz"
-put_s3 $(dirname "$release") $(basename "$release") "/path/on/s3/to/files/"
+# $release = "_build/hello/hello.tar.gz"
+# put_s3 $(dirname "$release") $(basename "$release") "/path/on/s3/to/files/"
