@@ -10,7 +10,7 @@ Pour lancer le tout, il vous faut :
 
 Vous pouvez visiter [`localhost:4000`](http://localhost:4000) depuis votre navigateur.
 
-## Configuration de production
+## Configuration de production
 
 La configuration de production est légèrement différente: `postgres` à la place de `sqlite3`
 et bundle de l'application avec `distillery`.
