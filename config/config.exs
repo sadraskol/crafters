@@ -15,8 +15,7 @@ config :crafters, CraftersWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "QoOUAD+i5Tuf9fjBuoONYASYx1P1F4e53TorZAptLbzdzy2UUVPGswZHh38x1f2r",
   render_errors: [view: CraftersWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Crafters.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Crafters.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -25,4 +24,4 @@ config :logger, :console,
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

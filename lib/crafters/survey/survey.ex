@@ -34,7 +34,10 @@ defmodule Crafters.Survey do
   def put_preference(id, slots, activities) do
     Repo.get!(Month, id)
     |> Ecto.build_assoc(:preferences)
-    |> Preference.changeset(%{slots: slots, activities: Enum.map(activities, &Activity.from_name/1)})
+    |> Preference.changeset(%{
+      slots: slots,
+      activities: Enum.map(activities, &Activity.from_name/1)
+    })
     |> Repo.insert()
   end
 
@@ -47,8 +50,12 @@ defmodule Crafters.Survey do
   end
 
   def set_current_month(id) do
-    Multi.new
-    |> Multi.update_all(:remove_current, from(m in Month, where: m.current == true), set: [current: false])
+    Multi.new()
+    |> Multi.update_all(
+      :remove_current,
+      from(m in Month, where: m.current == true),
+      set: [current: false]
+    )
     |> Multi.update_all(:set_current, from(m in Month, where: m.id == ^id), set: [current: true])
     |> Repo.transaction()
   end

@@ -26,13 +26,13 @@ defmodule CraftersWeb.ConnCase do
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Crafters.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Crafters.Repo, {:shared, self()})
     end
+
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
-
 end

@@ -28,8 +28,9 @@ defmodule CraftersWeb do
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/crafters_web/templates",
-                        namespace: CraftersWeb
+      use Phoenix.View,
+        root: "lib/crafters_web/templates",
+        namespace: CraftersWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]

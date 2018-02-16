@@ -8,23 +8,28 @@ defmodule CraftersWeb.PageView do
   end
 
   defp has_slot(activity, date, timeslot) do
-    fn(preference) ->
-      has_activity = Enum.any?(preference.activities, fn(act) -> act.name == activity end)
-      has_timeslot = Enum.any?(preference.slots, fn(slot) -> slot.date == date && slot.timeslot == timeslot end)
+    fn preference ->
+      has_activity = Enum.any?(preference.activities, fn act -> act.name == activity end)
+
+      has_timeslot =
+        Enum.any?(preference.slots, fn slot -> slot.date == date && slot.timeslot == timeslot end)
+
       has_activity && has_timeslot
     end
   end
 
   def included?(date, best_dates) do
-    Enum.any?(best_dates, fn(el) -> elem(el, 0) == date end)
+    Enum.any?(best_dates, fn el -> elem(el, 0) == date end)
   end
 
   def format_date_inline(date) do
-    [ content_tag(:span, day_of_week(date)),
+    [
+      content_tag(:span, day_of_week(date)),
       " ",
       content_tag(:span, date.day),
       " ",
-      content_tag(:span, month_of_year(date))]
+      content_tag(:span, month_of_year(date))
+    ]
   end
 
   def day_of_week(date) do

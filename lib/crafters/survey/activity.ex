@@ -6,9 +6,9 @@ defmodule Crafters.Survey.Activity do
   @foreign_key_type :binary_id
   @derive {Poison.Encoder, except: [:__meta__]}
   schema "activities" do
-    field :name, :string
+    field(:name, :string)
 
-    belongs_to :preference, Crafters.Survey.Preference
+    belongs_to(:preference, Crafters.Survey.Preference)
 
     timestamps()
   end

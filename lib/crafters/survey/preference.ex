@@ -7,9 +7,9 @@ defmodule Crafters.Survey.Preference do
   @foreign_key_type :binary_id
   @derive {Poison.Encoder, except: [:__meta__]}
   schema "preferences" do
-    belongs_to :month, Crafters.Survey.Month
-    has_many :slots, Crafters.Survey.Slot, on_delete: :delete_all
-    has_many :activities, Crafters.Survey.Activity, on_delete: :delete_all
+    belongs_to(:month, Crafters.Survey.Month)
+    has_many(:slots, Crafters.Survey.Slot, on_delete: :delete_all)
+    has_many(:activities, Crafters.Survey.Activity, on_delete: :delete_all)
 
     timestamps()
   end

@@ -1,5 +1,4 @@
 defmodule Crafters.ReleaseTasks do
-
   @start_apps [
     :crypto,
     :ssl,
@@ -14,36 +13,44 @@ defmodule Crafters.ReleaseTasks do
   defp prepare do
     me = myapp()
 
-    IO.puts "Loading #{me}.."
+    IO.puts("Loading #{me}..")
     :ok = Application.load(me)
 
-    IO.puts "Starting dependencies.."
+    IO.puts("Starting dependencies..")
     Enum.each(@start_apps, &Application.ensure_all_started/1)
   end
 
   def create do
     prepare()
-    Enum.each repos(), fn repo ->
+
+    Enum.each(repos(), fn repo ->
       case repo.__adapter__.storage_up(repo.config) do
         :ok ->
-          IO.puts "The database for #{inspect repo} has been created"
+          IO.puts("The database for #{inspect(repo)} has been created")
+
         {:error, :already_up} ->
-          IO.puts "The database for #{inspect repo} has already been created"
+          IO.puts("The database for #{inspect(repo)} has already been created")
+
         {:error, term} when is_binary(term) ->
-          IO.puts :stderr, "The database for #{inspect repo} couldn't be created: #{term}"
-          exit 1
+          IO.puts(:stderr, "The database for #{inspect(repo)} couldn't be created: #{term}")
+          exit(1)
+
         {:error, term} ->
-          IO.puts :stderr, "The database for #{inspect repo} couldn't be created: #{inspect term}"
-          exit 1
+          IO.puts(
+            :stderr,
+            "The database for #{inspect(repo)} couldn't be created: #{inspect(term)}"
+          )
+
+          exit(1)
       end
-    end
+    end)
   end
 
   def migrate do
     prepare()
 
-    IO.puts "Starting repos.."
-    Enum.each(repos(), &(&1.start_link(pool_size: 1)))
+    IO.puts("Starting repos..")
+    Enum.each(repos(), & &1.start_link(pool_size: 1))
 
     Enum.each(repos(), &run_migrations_for/1)
   end
@@ -52,7 +59,7 @@ defmodule Crafters.ReleaseTasks do
 
   defp run_migrations_for(repo) do
     app = Keyword.get(repo.config, :otp_app)
-    IO.puts "Running migrations for #{app}"
+    IO.puts("Running migrations for #{app}")
     Ecto.Migrator.run(repo, migrations_path(repo), :up, all: true)
   end
 
@@ -60,7 +67,7 @@ defmodule Crafters.ReleaseTasks do
 
   def priv_path_for(repo, filename) do
     app = Keyword.get(repo.config, :otp_app)
-    repo_underscore = repo |> Module.split |> List.last |> Macro.underscore
+    repo_underscore = repo |> Module.split() |> List.last() |> Macro.underscore()
     Path.join([priv_dir(app), repo_underscore, filename])
   end
 end

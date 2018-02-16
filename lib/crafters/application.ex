@@ -11,7 +11,7 @@ defmodule Crafters.Application do
       # Start the Ecto repository
       supervisor(Crafters.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(CraftersWeb.Endpoint, []),
+      supervisor(CraftersWeb.Endpoint, [])
       # Start your own worker by calling: Crafters.Worker.start_link(arg1, arg2, arg3)
       # worker(Crafters.Worker, [arg1, arg2, arg3]),
     ]
