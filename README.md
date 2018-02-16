@@ -1,19 +1,23 @@
-# Crafters
+# Lyon Crafters
 
-To start your Phoenix server:
+Pour lancer le tout, il vous faut :
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Start Phoenix endpoint with `mix phx.server`
+  * Installer `elixir`, `node`, `bower` (`npm install -g bower`), `sqlite3`
+  * Installer les dépendances avec `mix deps.get` et `cd front; npm install; bower install`
+  * Créer et migrer la base de donnée avec `mix ecto.create && mix ecto.migrate`
+  * Lancer la compilation des assets avec `cd front; npm run webpack:watch`
+  * Lancer le serveur `mix phx.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Vous pouvez visiter [`localhost:4000`](http://localhost:4000) depuis votre navigateur.
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+## Configuration de production
 
-## Learn more
+La configuration de production est légèrement différente: `postgres` à la place de `sqlite3`
+et bundle de l'application avec `distillery`.
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+## En savoir plus
+
+  * Elixir : https://elixir-lang.org/getting-started/introduction.html
+  * Phoenix : http://phoenixframework.org/docs/overview
+  * Purescript : http://www.purescript.org/
+  * React : https://reactjs.org/
