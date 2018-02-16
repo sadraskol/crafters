@@ -8,6 +8,7 @@
 erl_crash.dump
 
 /priv/static
+/priv/repo/data
 
 # Files matching config/*.secret.exs pattern contain sensitive
 # data and you should not commit them into version control.

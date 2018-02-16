@@ -48,10 +48,4 @@ config :logger, :console, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
-config :crafters, Crafters.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "crafters_dev",
-  hostname: "localhost",
-  pool_size: 10
+config :crafters, Crafters.Repo, adapter: Sqlite.Ecto2, database: "priv/repo/data/crafters.db"

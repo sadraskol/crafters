@@ -7,6 +7,5 @@ defmodule Crafters.Repo.Migrations.CreatePreferences do
 
       timestamps()
     end
-
   end
 end
