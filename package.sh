@@ -1,12 +1,18 @@
 #! /bin/bash
 
+MIX_ENV=prod mix local.hex --force
+MIX_ENV=prod mix local.rebar --force
+MIX_ENV=prod mix deps.get
+
 pushd front/
+npm i
+bower i --allow-root
 npm test
 NODE_ENV=production npm run webpack
 popd
-MIX_ENV=prod mix phx.digest
+MIX_ENV=prod mix phx.digest --force
 
-MIX_ENV=prod mix compile
+MIX_ENV=prod mix compile --force
 MIX_ENV=prod mix release
 
 # From https://gist.github.com/chrismdp/6c6b6c825b07f680e710
