@@ -15,10 +15,10 @@ import Slot (Slot(..), TimeSlot)
 render :: TimeSlot -> _ -> State -> Date -> ReactElement
 render timeslot dispatch state date =
   R.div [ RP.className "table-cell" ]
-    [ R.label [ pointerStyle ]
+    [ R.label [ RP.className $ if isChecked then "slot-checkbox is-checked" else "slot-checkbox" ]
       [ R.input [ RP._type "checkbox"
                 , RP.checked isChecked
-                , pointerStyle
+                , inputStyle
                 , RP.onChange \_ -> dispatch $ SingleToggle $ Slot date timeslot
                 ] []
       ]
@@ -26,4 +26,4 @@ render timeslot dispatch state date =
   where
     isChecked = any (eq $ Slot date timeslot) (unwrap state).slots
 
-    pointerStyle = RP.style { cursor: "pointer" }
+    inputStyle = RP.style { visibility: "hidden" }

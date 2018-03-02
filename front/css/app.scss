@@ -52,3 +52,13 @@ $family-primary: $family-serif;
 .is-not-expanded {
   width: 500px;
 }
+
+.slot-checkbox {
+  &.is-checked {
+    background-color: hsl(171, 100%, 41%);
+    box-shadow: none;
+  }
+
+  box-shadow: inset 1px 2px 5px $grey-light;
+  border: 1px solid #080408;
+}
