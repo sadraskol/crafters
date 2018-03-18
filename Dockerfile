@@ -57,8 +57,8 @@ RUN dos2unix /app/_build/prod/rel/crafters/releases/0.0.1/commands/*.sh
 
 FROM elixir:1.6-slim
 
-ENV PORT 80
-EXPOSE 80
+ENV PORT 4000
+EXPOSE 4000
 
 VOLUME ["/var/crafters"]
 

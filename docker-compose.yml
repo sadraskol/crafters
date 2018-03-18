@@ -1,11 +1,12 @@
 server:
   build: .
   expose:
-   - "80"
+   - "4000"
   volumes:
    - ./data:/var/cafters:z
   environment:
    - VIRTUAL_HOST=swcrafts.lyontechhub.org
+   - VIRTUAL_PORT=4000
    - CRAFTERS_CREDENTIALS=admin:admin
   restart: always
   cpu_shares: 50
