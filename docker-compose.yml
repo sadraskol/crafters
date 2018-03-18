@@ -1,0 +1,14 @@
+server:
+  build: .
+  expose:
+   - "80"
+  volumes:
+   - ./data:/var/cafters:z
+  environment:
+   - VIRTUAL_HOST=swcrafts.lyontechhub.org
+   - CRAFTERS_CREDENTIALS=admin:admin
+  restart: always
+  cpu_shares: 50
+  cpu_quota: 50000
+  cpuset: "0"
+  mem_limit: 128m
