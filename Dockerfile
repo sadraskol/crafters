@@ -3,10 +3,13 @@ WORKDIR /app/front
 
 RUN apt update && \
     apt install -y --no-install-recommends curl ca-certificates build-essential git && \
-    rm -rf /var/lib/apt/lists/* /tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* && \
+    chown -R node:node /app
+
+USER node
 
 COPY ./front/*.json /app/front/
-RUN npm i && ./node_modules/.bin/bower i --allow-root
+RUN npm i && ./node_modules/.bin/bower i
 
 COPY ./front /app/front/
 ENV NODE_ENV production
@@ -19,9 +22,15 @@ WORKDIR /app
 
 RUN apt update && \
     apt install -y --no-install-recommends curl ca-certificates build-essential sqlite3 dos2unix && \
-    rm -rf /var/lib/apt/lists/* /tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* && \
+    groupadd --gid 1000 elixir && \
+    useradd --uid 1000 --gid elixir --shell /bin/bash --create-home elixir
 
 COPY ./mix.* /app/
+
+RUN chown -R elixir:elixir /app
+
+USER elixir
 
 RUN mix local.hex --force && \
     mix local.rebar --force && \
@@ -32,6 +41,12 @@ COPY ./lib /app/lib
 COPY ./priv /app/priv
 COPY ./rel /app/rel
 COPY --from=build-front /app/priv/static /app/priv/static
+
+USER root
+
+RUN chown -R elixir:elixir /app
+
+USER elixir
 
 RUN mix phx.digest --force && \
     mix compile --force && \
@@ -51,7 +66,13 @@ CMD ["/app/_build/prod/rel/crafters/bin/crafters", "run"]
 
 RUN apt update && \
     apt install -y --no-install-recommends sqlite3 && \
-    rm -rf /var/lib/apt/lists/* /tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* && \
+    groupadd --gid 1000 elixir && \
+    useradd --uid 1000 --gid elixir --shell /bin/bash --create-home elixir
 
 COPY --from=build-server /app/_build /app/_build
+
+RUN chown -R elixir:elixir /app /var/crafters
+
+USER elixir
 
