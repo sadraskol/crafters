@@ -40,7 +40,7 @@ defmodule CraftersWeb.PageController do
       Crafters.Survey.get_month!(month_id)
       |> month_to_init()
       |> Map.put("csrf_token", get_csrf_token())
-      |> Poison.encode!()
+      |> Jason.encode!()
 
     render(conn, "preference.html", init: init)
   end

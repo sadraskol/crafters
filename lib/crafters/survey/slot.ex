@@ -4,7 +4,7 @@ defmodule Crafters.Survey.Slot do
   alias Crafters.Survey.Slot
 
   @foreign_key_type :binary_id
-  @derive {Poison.Encoder, except: [:__meta__]}
+  @derive {Jason.Encoder, except: [:__meta__]}
   schema "slots" do
     field(:date, :date)
     field(:timeslot, :string)

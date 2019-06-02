@@ -4,7 +4,7 @@ defmodule Crafters.Survey.Activity do
   alias Crafters.Survey.Activity
 
   @foreign_key_type :binary_id
-  @derive {Poison.Encoder, except: [:__meta__]}
+  @derive {Jason.Encoder, except: [:__meta__]}
   schema "activities" do
     field(:name, :string)
 

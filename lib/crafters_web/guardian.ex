@@ -1,9 +1,9 @@
 defmodule CraftersWeb.Guardian do
-  def control(login, password) do
+  def control(conn, login, password) do
     if Enum.member?(credentials(), {login, password}) do
-      :authorized
+      conn
     else
-      :unauthorized
+      Plug.Conn.halt(conn)
     end
   end
 

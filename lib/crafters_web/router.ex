@@ -16,7 +16,7 @@ defmodule CraftersWeb.Router do
   end
 
   pipeline :auth do
-    plug(PlugBasicAuth, validation: &CraftersWeb.Guardian.control/2)
+    plug(BasicAuth, callback: &CraftersWeb.Guardian.control/3)
   end
 
   scope "/", CraftersWeb do

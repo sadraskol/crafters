@@ -5,7 +5,7 @@ defmodule Crafters.Survey.Month do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  @derive {Poison.Encoder, only: [:id, :range]}
+  @derive {Jason.Encoder, only: [:id, :range]}
   schema "months" do
     field(:start, :date)
     field(:last, :date)

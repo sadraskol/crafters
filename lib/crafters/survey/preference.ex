@@ -5,7 +5,7 @@ defmodule Crafters.Survey.Preference do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  @derive {Poison.Encoder, except: [:__meta__]}
+  @derive {Jason.Encoder, except: [:__meta__]}
   schema "preferences" do
     belongs_to(:month, Crafters.Survey.Month)
     has_many(:slots, Crafters.Survey.Slot, on_delete: :delete_all)
