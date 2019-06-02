@@ -8,29 +8,31 @@
     "test:watch": "pulp -w test --src-path js/src --test-path js/test"
   },
   "devDependencies": {
-    "babel-loader": "^7.1.2",
-    "css-loader": "^0.28.7",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "node-sass": "^4.5.3",
-    "postcss-loader": "^2.0.8",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^2.1.1",
+    "node-sass": "^4.12.0",
+    "postcss-loader": "^3.0.0",
     "pulp": "^12.0.1",
     "purescript": "^0.11.6",
     "purescript-psa": "^0.5.1",
-    "purs-loader": "^3.1.2",
+    "purs-loader": "^3.6.0",
     "scss-loader": "0.0.1",
-    "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.3"
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.5.1"
   },
   "dependencies": {
-    "babel-core": "^6.26.0",
-    "bower": "^1.8.2",
+    "@babel/core": "^7.4.5",
+    "autoprefixer": "^9.5.1",
+    "babel-core": "^6.26.3",
+    "bower": "^1.8.8",
     "bulma": "^0.6.2",
     "create-react-class": "^15.6.2",
-    "purescript-psa": "^0.5.1",
+    "mini-css-extract-plugin": "^0.7.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "sass-loader": "^6.0.6",
-    "style-loader": "^0.19.1",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
     "xhr2": "^0.1.4"
   }
 }
